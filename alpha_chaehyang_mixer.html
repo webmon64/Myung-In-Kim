@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>알파 채향 분채 조색기</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #FAF8F4;
+    --surface: #FFFFFF;
+    --border: rgba(0,0,0,0.1);
+    --border-md: rgba(0,0,0,0.18);
+    --text: #1C1C1C;
+    --text-muted: #6B6560;
+    --text-hint: #A09890;
+    --accent: #3B2F2A;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+  header {
+    background: var(--accent);
+    color: #F5EDE4;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  header h1 { font-family: 'Nanum Myeongjo', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: 0.04em; }
+  header span { font-size: 0.8rem; opacity: 0.65; letter-spacing: 0.06em; }
+  .layout { display: flex; min-height: calc(100vh - 58px); }
+  .sidebar { width: 220px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 1.5rem 0; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 1.5rem; cursor: pointer; font-size: 0.875rem; color: var(--text-muted); border-left: 3px solid transparent; transition: all 0.15s; }
+  .nav-item:hover { background: var(--bg); color: var(--text); }
+  .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: #FAF2EC; font-weight: 500; }
+  .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+  .main { flex: 1; padding: 2rem; overflow-y: auto; }
+  .section { display: none; max-width: 760px; }
+  .section.active { display: block; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .card-title { font-family: 'Nanum Myeongjo', serif; font-size: 1rem; margin-bottom: 1rem; color: var(--accent); }
+  label, .lbl { font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 4px; letter-spacing: 0.03em; }
+  input[type=text], input[type=number] {
+    width: 100%; padding: 8px 12px; border: 1px solid var(--border-md); border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--text); font-size: 0.875rem; font-family: 'Noto Sans KR', sans-serif;
+    outline: none; transition: border-color 0.15s;
+  }
+  input[type=text]:focus, input[type=number]:focus { border-color: var(--accent); }
+  input[type=color] { width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: none; }
+  input[type=file] { font-size: 0.8rem; }
+  .btn { padding: 8px 18px; border: 1px solid var(--border-md); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); cursor: pointer; font-size: 0.85rem; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; }
+  .btn:hover { background: var(--bg); }
+  .btn-primary { background: var(--accent); color: #F5EDE4; border-color: var(--accent); }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-sm { padding: 5px 12px; font-size: 0.78rem; }
+  .btn-danger { border-color: #B03030; color: #B03030; }
+  .btn-danger:hover { background: #FFF0F0; }
+  .row { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+  .col { flex: 1; min-width: 140px; }
+  .color-preview {
+    width: 88px; height: 88px; border-radius: var(--radius); border: 1px solid var(--border-md);
+    position: relative; overflow: hidden; flex-shrink: 0; cursor: pointer;
+  }
+  .color-preview input[type=color] { opacity: 0; position: absolute; inset: 0; width: 100%; height: 100%; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 8px; }
+  .chip { border-radius: var(--radius-sm); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: transform 0.12s, box-shadow 0.12s; }
+  .chip:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .chip-swatches { display: flex; height: 52px; }
+  .chip-label { padding: 5px 8px; background: var(--surface); }
+  .chip-code { font-size: 0.72rem; font-weight: 500; color: var(--accent); }
+  .chip-name { font-size: 0.72rem; color: var(--text-muted); }
+  .recipe-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .recipe-swatch { width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--border); flex-shrink: 0; }
+  .recipe-name { font-size: 0.8rem; flex: 0 0 100px; }
+  .recipe-pct { font-size: 0.8rem; font-weight: 500; min-width: 34px; text-align: right; }
+  .bar-track { flex: 1; height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  .recipe-drops { font-size: 0.75rem; color: var(--text-muted); min-width: 54px; text-align: right; }
+  .compare-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 1rem; }
+  .compare-box { border-radius: var(--radius-sm); border: 1px solid var(--border); overflow: hidden; }
+  .compare-swatch { height: 52px; }
+  .compare-label { font-size: 0.72rem; padding: 4px 6px; color: var(--text-muted); background: var(--surface); }
+  .delta-badge { font-size: 0.75rem; padding: 3px 9px; border-radius: 20px; background: #EAFAF3; color: #1B6B3A; border: 1px solid #A8D8BE; display: inline-block; }
+  .delta-badge.warn { background: #FFF8E6; color: #8A6200; border-color: #F0CF80; }
+  .ink-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); }
+  .ink-dot { width: 18px; height: 18px; border-radius: 50%; background: #1a1a1a; border: 1px solid var(--border-md); flex-shrink: 0; }
+  .saved-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .saved-swatch { width: 40px; height: 40px; border-radius: var(--radius-sm); border: 1px solid var(--border); flex-shrink: 0; }
+  .saved-name { flex: 1; font-size: 0.9rem; font-weight: 500; }
+  .saved-recipe-text { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+  .canvas-wrap { margin-top: 1rem; }
+  canvas { width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: crosshair; display: block; }
+  .hint { font-size: 0.75rem; color: var(--text-hint); margin-top: 4px; }
+  .upload-zone { border: 2px dashed var(--border-md); border-radius: var(--radius); padding: 2.5rem; text-align: center; color: var(--text-muted); font-size: 0.875rem; cursor: pointer; transition: all 0.15s; }
+  .upload-zone:hover { border-color: var(--accent); background: #FAF2EC; }
+  .upload-zone input { display: none; }
+  .section-header { margin-bottom: 1.5rem; }
+  .section-header h2 { font-family: 'Nanum Myeongjo', serif; font-size: 1.25rem; color: var(--accent); }
+  .section-header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+  .empty { color: var(--text-hint); font-size: 0.875rem; padding: 2rem 0; text-align: center; }
+  .mt { margin-top: 10px; }
+  .flex-end { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>알파 채향 분채 조색기</h1>
+  <span>Alpha Chaehyang 32色 · Mixing Assistant</span>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="nav-item active" onclick="switchTab('mixer')">
+      <span class="nav-icon">⬤</span> 조색 추천
+    </div>
+    <div class="nav-item" onclick="switchTab('picker')">
+      <span class="nav-icon">◎</span> 이미지 스포이드
+    </div>
+    <div class="nav-item" onclick="switchTab('palette')">
+      <span class="nav-icon">▦</span> 색상 팔레트
+    </div>
+    <div class="nav-item" onclick="switchTab('saved')">
+      <span class="nav-icon">◈</span> 저장된 레시피
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <!-- 조색 추천 -->
+    <div id="tab-mixer" class="section active">
+      <div class="section-header">
+        <h2>조색 추천</h2>
+        <p>목표 색상을 입력하면 최적의 채향 분채 배합을 계산합니다</p>
+      </div>
+      <div class="card">
+        <p class="card-title">목표 색상</p>
+        <div class="row">
+          <div class="color-preview" id="targetPreview" style="background:#E8624A;">
+            <input type="color" id="colorPicker" value="#E8624A" oninput="onColorPick(this.value)">
+          </div>
+          <div class="col">
+            <label>HEX 코드</label>
+            <input type="text" id="hexInput" value="#E8624A" onchange="onHexInput(this.value)" placeholder="#RRGGBB" style="margin-bottom:8px;">
+            <label>RGB</label>
+            <p id="rgbDisplay" style="font-size:0.8rem;color:var(--text-muted);">R:232 G:98 B:74</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:140px;">
+            <label>총 방울 수</label>
+            <input type="number" id="totalDrops" value="20" min="5" max="100" style="width:80px;">
+            <button class="btn btn-primary" onclick="calcRecipe()" style="margin-top:4px;">최적 레시피 계산</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="recipeResult" style="display:none;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem;">
+          <div id="resultSwatch" style="width:40px;height:40px;border-radius:var(--radius-sm);border:1px solid var(--border);"></div>
+          <div>
+            <p style="font-size:0.9rem;font-weight:500;font-family:'Nanum Myeongjo',serif;">최적 배합 레시피</p>
+            <span class="delta-badge" id="deltaLabel"></span>
+          </div>
+        </div>
+        <div id="recipeList"></div>
+        <div class="ink-row" id="inkRow" style="display:none;">
+          <div class="ink-dot"></div>
+          <span style="font-size:0.8rem;flex:1;">먹(墨) 소량 첨가 — 채도 조절용</span>
+          <span style="font-size:0.8rem;font-weight:500;" id="inkPct"></span>
+          <span style="font-size:0.75rem;color:var(--text-muted);" id="inkDrops"></span>
+        </div>
+        <div class="compare-grid">
+          <div class="compare-box"><div class="compare-swatch" id="cmp1"></div><p class="compare-label">1회 채색</p></div>
+          <div class="compare-box"><div class="compare-swatch" id="cmp2"></div><p class="compare-label">2회 채색</p></div>
+          <div class="compare-box"><div class="compare-swatch" id="cmpDry"></div><p class="compare-label">건조 후</p></div>
+          <div class="compare-box"><div class="compare-swatch" id="cmpTarget"></div><p class="compare-label">목표 색상</p></div>
+        </div>
+        <div class="row mt">
+          <div class="col">
+            <label>레시피 이름</label>
+            <input type="text" id="recipeName" placeholder="예: 국화 꽃잎색, 매화 배경색">
+          </div>
+          <button class="btn btn-primary" onclick="saveRecipe()" style="align-self:flex-end;">저장</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 이미지 스포이드 -->
+    <div id="tab-picker" class="section">
+      <div class="section-header">
+        <h2>이미지 스포이드</h2>
+        <p>이미지를 업로드하고 원하는 부분을 클릭하여 색상을 추출합니다</p>
+      </div>
+      <div class="card">
+        <label class="upload-zone" id="uploadZone">
+          <input type="file" accept="image/*" onchange="loadImage(event)">
+          <div style="font-size:2rem;margin-bottom:8px;">⊕</div>
+          <p>이미지를 클릭하거나 드래그하여 업로드</p>
+          <p style="font-size:0.75rem;margin-top:4px;color:var(--text-hint);">JPG, PNG, WEBP 지원</p>
+        </label>
+        <div class="canvas-wrap" id="canvasWrap" style="display:none;">
+          <canvas id="imgCanvas" onclick="pickColor(event)"></canvas>
+          <p class="hint">캔버스를 클릭하면 해당 위치의 색상이 추출됩니다</p>
+        </div>
+      </div>
+      <div class="card" id="pickedCard" style="display:none;">
+        <p class="card-title">추출된 색상</p>
+        <div class="row">
+          <div class="color-preview" id="pickedPreview" style="pointer-events:none;"></div>
+          <div>
+            <label>HEX</label>
+            <p style="font-size:1rem;font-weight:500;" id="pickedHex"></p>
+            <label style="margin-top:6px;">RGB</label>
+            <p style="font-size:0.8rem;color:var(--text-muted);" id="pickedRgb"></p>
+            <button class="btn btn-primary" style="margin-top:12px;" onclick="usePickedColor()">이 색으로 레시피 계산 →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 색상 팔레트 -->
+    <div id="tab-palette" class="section">
+      <div class="section-header">
+        <h2>알파 채향 분채 32색</h2>
+        <p>좌: 1회 채색 · 우: 2회 채색. 색상을 클릭하면 레시피를 계산합니다</p>
+      </div>
+      <div class="card">
+        <div class="grid-4" id="paletteGrid"></div>
+      </div>
+    </div>
+
+    <!-- 저장된 레시피 -->
+    <div id="tab-saved" class="section">
+      <div class="section-header">
+        <h2>저장된 레시피</h2>
+        <p>브라우저를 닫아도 유지됩니다</p>
+      </div>
+      <div class="card">
+        <div id="savedList"><p class="empty">저장된 레시피가 없습니다</p></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const COLORS = [
+  {code:'K01',name:'호분',hex1:'#F5EDE4',hex2:'#EDE0D3'},
+  {code:'K02',name:'황',hex1:'#F5D840',hex2:'#EAC820'},
+  {code:'K03',name:'농황',hex1:'#F0C014',hex2:'#D4A000'},
+  {code:'K04',name:'황주',hex1:'#F4893A',hex2:'#E06818'},
+  {code:'K05',name:'주',hex1:'#E8532A',hex2:'#D03818'},
+  {code:'K06',name:'양홍',hex1:'#D83040',hex2:'#BE1828'},
+  {code:'K07',name:'연지',hex1:'#B03060',hex2:'#902048'},
+  {code:'K08',name:'홍매',hex1:'#D84080',hex2:'#B82060'},
+  {code:'K09',name:'산호',hex1:'#F5C8A8',hex2:'#EDB090'},
+  {code:'K10',name:'구우자',hex1:'#C0C8F0',hex2:'#A0A8E0'},
+  {code:'K11',name:'상황',hex1:'#F0D89A',hex2:'#E0C078'},
+  {code:'K12',name:'모단',hex1:'#C840C0',hex2:'#A020A0'},
+  {code:'K13',name:'자',hex1:'#8848B8',hex2:'#6830A0'},
+  {code:'K14',name:'청자',hex1:'#5840A8',hex2:'#382890'},
+  {code:'K15',name:'남',hex1:'#404858',hex2:'#282838'},
+  {code:'K16',name:'군청',hex1:'#2050D0',hex2:'#1030B0'},
+  {code:'K17',name:'미청',hex1:'#5880D0',hex2:'#3860B8'},
+  {code:'K18',name:'천청',hex1:'#2898E0',hex2:'#1078C8'},
+  {code:'K19',name:'백군',hex1:'#90B8E8',hex2:'#78A0D8'},
+  {code:'K20',name:'약엽',hex1:'#78C030',hex2:'#58A010'},
+  {code:'K21',name:'백록',hex1:'#88E0C0',hex2:'#60C8A8'},
+  {code:'K22',name:'화백록',hex1:'#50D0A8',hex2:'#30B890'},
+  {code:'K23',name:'녹청',hex1:'#20A888',hex2:'#108870'},
+  {code:'K24',name:'청동',hex1:'#208878',hex2:'#106860'},
+  {code:'K25',name:'고대녹청',hex1:'#507858',hex2:'#385840'},
+  {code:'K26',name:'농초',hex1:'#688040',hex2:'#486028'},
+  {code:'K27',name:'황초',hex1:'#789030',hex2:'#587010'},
+  {code:'K28',name:'앵다록',hex1:'#587848',hex2:'#385830'},
+  {code:'K29',name:'황토',hex1:'#C89030',hex2:'#A87018'},
+  {code:'K30',name:'대자',hex1:'#B05828',hex2:'#903818'},
+  {code:'K31',name:'초다',hex1:'#886038',hex2:'#684020'},
+  {code:'K32',name:'흑',hex1:'#484848',hex2:'#282828'}
+];
+
+function hexToRgb(h){h=h.replace('#','');return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)};}
+function rgbToHex(r,g,b){return'#'+[r,g,b].map(v=>Math.min(255,Math.max(0,Math.round(v))).toString(16).padStart(2,'0')).join('');}
+function deltaE(a,b){return Math.sqrt((a.r-b.r)**2+(a.g-b.g)**2+(a.b-b.b)**2);}
+function blendColors(hexes,weights){
+  let r=0,g=0,b=0,total=weights.reduce((a,c)=>a+c,0);
+  hexes.forEach((h,i)=>{let rgb=hexToRgb(h),w=weights[i]/total;r+=rgb.r*w;g+=rgb.g*w;b+=rgb.b*w;});
+  return{r,g,b};
+}
+function simulateLayers(rgb,n){let a=n===1?0.55:0.82;return{r:255*(1-a)+rgb.r*a,g:255*(1-a)+rgb.g*a,b:255*(1-a)+rgb.b*a};}
+function dryShift(rgb){return{r:Math.min(255,rgb.r*1.07+8),g:Math.min(255,rgb.g*1.07+8),b:Math.min(255,rgb.b*1.07+8)};}
+
+function findBestMix(target){
+  let best=null,bestDE=9999;
+  const N=COLORS.length;
+  COLORS.forEach(c=>{let de=deltaE(target,hexToRgb(c.hex2));if(de<bestDE){bestDE=de;best={combo:[{c,w:1}],de};}});
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++)for(let r=1;r<=9;r++){
+    let w1=r/10,w2=1-w1;
+    let c1=hexToRgb(COLORS[i].hex2),c2=hexToRgb(COLORS[j].hex2);
+    let bl={r:c1.r*w1+c2.r*w2,g:c1.g*w1+c2.g*w2,b:c1.b*w1+c2.b*w2};
+    let de=deltaE(target,bl);
+    if(de<bestDE){bestDE=de;best={combo:[{c:COLORS[i],w:w1},{c:COLORS[j],w:w2}],de};}
+  }
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++)for(let k=j+1;k<N;k++){
+    [[5,3,2],[4,4,2],[6,2,2],[5,4,1],[3,5,2],[4,3,3]].forEach(([a,b,c])=>{
+      let t=a+b+c,w1=a/t,w2=b/t,w3=c/t;
+      let c1=hexToRgb(COLORS[i].hex2),c2=hexToRgb(COLORS[j].hex2),c3=hexToRgb(COLORS[k].hex2);
+      let bl={r:c1.r*w1+c2.r*w2+c3.r*w3,g:c1.g*w1+c2.g*w2+c3.g*w3,b:c1.b*w1+c2.b*w2+c3.b*w3};
+      let de=deltaE(target,bl);
+      if(de<bestDE){bestDE=de;best={combo:[{c:COLORS[i],w:w1},{c:COLORS[j],w:w2},{c:COLORS[k],w:w3}],de};}
+    });
+  }
+  return best;
+}
+
+let currentResult=null;
+
+function calcRecipe(){
+  const hex=document.getElementById('hexInput').value;
+  if(!/^#[0-9A-Fa-f]{6}$/.test(hex)){alert('올바른 HEX 코드를 입력하세요 (예: #E8624A)');return;}
+  const targetRgb=hexToRgb(hex);
+  const result=findBestMix(targetRgb);
+  currentResult={targetHex:hex,result};
+  const drops=parseInt(document.getElementById('totalDrops').value)||20;
+  const needsInk=result.de>35;
+  const inkPct=needsInk?0.02:0;
+  document.getElementById('recipeResult').style.display='block';
+  document.getElementById('resultSwatch').style.background=hex;
+  const deBadge=document.getElementById('deltaLabel');
+  deBadge.textContent=`ΔE ${result.de.toFixed(1)} ${result.de<20?'· 매우 유사':result.de<40?'· 근사':' · 참고용'}`;
+  deBadge.className='delta-badge'+(result.de>40?' warn':'');
+  let html='',hexes=[],weights=[];
+  result.combo.forEach(item=>{
+    let pct=Math.round(item.w*(1-inkPct)*100);
+    let d=Math.round(item.w*(1-inkPct)*drops);
+    hexes.push(item.c.hex2);weights.push(item.w);
+    html+=`<div class="recipe-row">
+      <div class="recipe-swatch" style="background:${item.c.hex2}"></div>
+      <span class="recipe-name">${item.c.code} ${item.c.name}</span>
+      <span class="recipe-pct">${pct}%</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${item.c.hex2}"></div></div>
+      <span class="recipe-drops">${d}방울</span>
+    </div>`;
+  });
+  document.getElementById('recipeList').innerHTML=html;
+  const inkRow=document.getElementById('inkRow');
+  if(needsInk){inkRow.style.display='flex';document.getElementById('inkPct').textContent='2%';document.getElementById('inkDrops').textContent=`${Math.round(0.02*drops)}방울`;}
+  else inkRow.style.display='none';
+  const blended=blendColors(hexes,weights);
+  if(needsInk){blended.r*=0.98;blended.g*=0.98;blended.b*=0.98;}
+  const s1=simulateLayers(blended,1),s2=simulateLayers(blended,2),dry=dryShift(s2);
+  document.getElementById('cmp1').style.background=rgbToHex(s1.r,s1.g,s1.b);
+  document.getElementById('cmp2').style.background=rgbToHex(s2.r,s2.g,s2.b);
+  document.getElementById('cmpDry').style.background=rgbToHex(dry.r,dry.g,dry.b);
+  document.getElementById('cmpTarget').style.background=hex;
+}
+
+function saveRecipe(){
+  if(!currentResult)return;
+  const name=document.getElementById('recipeName').value.trim()||'이름 없는 레시피';
+  const saved=JSON.parse(localStorage.getItem('chaehyang_recipes')||'[]');
+  saved.unshift({name,targetHex:currentResult.targetHex,combo:currentResult.result.combo,de:currentResult.result.de,ts:Date.now()});
+  localStorage.setItem('chaehyang_recipes',JSON.stringify(saved));
+  document.getElementById('recipeName').value='';
+  alert(`"${name}" 저장 완료!`);
+  renderSaved();
+}
+
+function deleteRecipe(i){
+  if(!confirm('삭제하시겠습니까?'))return;
+  const saved=JSON.parse(localStorage.getItem('chaehyang_recipes')||'[]');
+  saved.splice(i,1);
+  localStorage.setItem('chaehyang_recipes',JSON.stringify(saved));
+  renderSaved();
+}
+
+function loadRecipe(i){
+  const saved=JSON.parse(localStorage.getItem('chaehyang_recipes')||'[]');
+  const item=saved[i];
+  document.getElementById('hexInput').value=item.targetHex;
+  document.getElementById('colorPicker').value=item.targetHex;
+  document.getElementById('targetPreview').style.background=item.targetHex;
+  onColorPick(item.targetHex);
+  switchTab('mixer');
+  calcRecipe();
+}
+
+function renderSaved(){
+  const saved=JSON.parse(localStorage.getItem('chaehyang_recipes')||'[]');
+  const el=document.getElementById('savedList');
+  if(!saved.length){el.innerHTML='<p class="empty">저장된 레시피가 없습니다</p>';return;}
+  el.innerHTML=saved.map((s,i)=>`
+    <div class="saved-item">
+      <div class="saved-swatch" style="background:${s.targetHex}"></div>
+      <div style="flex:1;">
+        <p class="saved-name">${s.name}</p>
+        <p class="saved-recipe-text">${s.combo.map(c=>`${c.c.code} ${c.c.name} ${Math.round(c.w*100)}%`).join(' + ')} · ΔE ${s.de.toFixed(1)}</p>
+      </div>
+      <button class="btn btn-sm" onclick="loadRecipe(${i})" style="margin-right:4px;">불러오기</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteRecipe(${i})">삭제</button>
+    </div>`).join('');
+}
+
+function renderPalette(){
+  document.getElementById('paletteGrid').innerHTML=COLORS.map(c=>`
+    <div class="chip" onclick="usePaletteColor('${c.hex2}')" title="${c.code} ${c.name}">
+      <div class="chip-swatches">
+        <div style="flex:1;background:${c.hex1}"></div>
+        <div style="flex:1;background:${c.hex2}"></div>
+      </div>
+      <div class="chip-label">
+        <span class="chip-code">${c.code}</span>
+        <span class="chip-name"> ${c.name}</span>
+      </div>
+    </div>`).join('');
+}
+
+function usePaletteColor(hex){
+  document.getElementById('hexInput').value=hex;
+  document.getElementById('colorPicker').value=hex;
+  document.getElementById('targetPreview').style.background=hex;
+  onColorPick(hex);
+  switchTab('mixer');
+  calcRecipe();
+}
+
+function onColorPick(hex){
+  document.getElementById('hexInput').value=hex;
+  document.getElementById('targetPreview').style.background=hex;
+  const rgb=hexToRgb(hex);
+  document.getElementById('rgbDisplay').textContent=`R:${rgb.r} G:${rgb.g} B:${rgb.b}`;
+  document.getElementById('colorPicker').value=hex;
+}
+
+function onHexInput(val){
+  if(/^#[0-9A-Fa-f]{6}$/.test(val)){document.getElementById('colorPicker').value=val;onColorPick(val);}
+}
+
+let imgCtx=null;
+function loadImage(e){
+  const file=e.target.files[0];if(!file)return;
+  const url=URL.createObjectURL(file);
+  const img=new Image();
+  img.onload=()=>{
+    document.getElementById('uploadZone').style.display='none';
+    const wrap=document.getElementById('canvasWrap');wrap.style.display='block';
+    const canvas=document.getElementById('imgCanvas');
+    const maxW=700,scale=Math.min(1,maxW/img.width);
+    canvas.width=img.width*scale;canvas.height=img.height*scale;
+    const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    imgCtx=ctx;
+  };
+  img.src=url;
+}
+function pickColor(e){
+  if(!imgCtx)return;
+  const canvas=document.getElementById('imgCanvas');
+  const rect=canvas.getBoundingClientRect();
+  const sx=canvas.width/rect.width,sy=canvas.height/rect.height;
+  const x=Math.round((e.clientX-rect.left)*sx),y=Math.round((e.clientY-rect.top)*sy);
+  const px=imgCtx.getImageData(x,y,1,1).data;
+  const hex=rgbToHex(px[0],px[1],px[2]);
+  document.getElementById('pickedCard').style.display='block';
+  document.getElementById('pickedPreview').style.background=hex;
+  document.getElementById('pickedHex').textContent=hex;
+  document.getElementById('pickedRgb').textContent=`R:${px[0]} G:${px[1]} B:${px[2]}`;
+  document.getElementById('pickedCard')._hex=hex;
+}
+function usePickedColor(){
+  const hex=document.getElementById('pickedCard')._hex;if(!hex)return;
+  document.getElementById('hexInput').value=hex;
+  document.getElementById('colorPicker').value=hex;
+  document.getElementById('targetPreview').style.background=hex;
+  onColorPick(hex);
+  switchTab('mixer');
+  calcRecipe();
+}
+
+function switchTab(id){
+  document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',['mixer','picker','palette','saved'][i]===id));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='saved')renderSaved();
+}
+
+renderPalette();
+onColorPick('#E8624A');
+</script>
+</body>
+</html>
