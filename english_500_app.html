@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기본 영어 500문장 학습</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FDF8F0;
+    --warm-white: #FFFDF8;
+    --soft-green: #E8F5E9;
+    --mid-green: #4CAF50;
+    --dark-green: #2E7D32;
+    --accent-gold: #D4A017;
+    --accent-amber: #F5A623;
+    --soft-blue: #E3F0FB;
+    --mid-blue: #4A90D9;
+    --dark-blue: #1A5F9E;
+    --text-dark: #2C2C2A;
+    --text-mid: #5F5E5A;
+    --text-light: #888780;
+    --border: #D3D1C7;
+    --card-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --radius: 14px;
+    --font-kr: 'Noto Sans KR', sans-serif;
+    --font-en: 'Merriweather', serif;
+    --font-serif-kr: 'Noto Serif KR', serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-kr);
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, #1A5F9E 0%, #2E7D32 100%);
+    color: white;
+    padding: 0;
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 22px 24px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-title {
+    font-family: var(--font-serif-kr);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .header-sub {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 3px;
+    font-weight: 400;
+  }
+  .header-badge {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* ===== NAV TABS ===== */
+  .nav-tabs {
+    background: white;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: var(--font-kr);
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .nav-tab:hover { color: var(--dark-blue); background: var(--soft-blue); }
+  .nav-tab.active { color: var(--dark-blue); border-bottom-color: var(--dark-blue); font-weight: 700; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  /* ===== PROGRESS SECTION ===== */
+  .progress-section {
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+  }
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .progress-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+  .progress-count {
+    font-size: 14px;
+    color: var(--dark-green);
+    font-weight: 700;
+  }
+  .progress-bar-bg {
+    background: #E8F5E9;
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #2E7D32);
+    border-radius: 8px;
+    transition: width 0.5s ease;
+  }
+  .progress-sub {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 8px;
+  }
+  .day-dots {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .day-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .day-dot.done { background: var(--mid-green); border-color: var(--dark-green); color: white; }
+  .day-dot.current { background: var(--mid-blue); border-color: var(--dark-blue); color: white; font-weight: 700; }
+  .day-dot:hover { transform: scale(1.08); }
+
+  /* ===== DAY SELECTOR ===== */
+  .day-selector {
+    background: white;
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+  }
+  .day-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    white-space: nowrap;
+  }
+  .day-nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: white;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: var(--text-dark);
+  }
+  .day-nav-btn:hover { background: var(--soft-blue); border-color: var(--mid-blue); }
+  .day-display {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dark-blue);
+  }
+  .day-range { font-size: 12px; color: var(--text-light); display: block; font-weight: 400; }
+  .day-unit-tag {
+    background: var(--soft-blue);
+    color: var(--dark-blue);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* ===== SENTENCE CARD ===== */
+  .sentence-card {
+    background: var(--warm-white);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    transition: all 0.3s;
+  }
+  .sentence-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .card-num {
+    background: var(--dark-blue);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .card-unit {
+    font-size: 11px;
+    color: var(--text-light);
+    background: #f1efe8;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .en-sentence {
+    font-family: var(--font-en);
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--text-dark);
+    margin-bottom: 18px;
+    font-weight: 400;
+  }
+  .en-sentence em {
+    font-style: normal;
+    color: var(--dark-blue);
+    font-weight: 700;
+  }
+  .kr-sentence {
+    font-family: var(--font-serif-kr);
+    font-size: 16px;
+    color: var(--dark-green);
+    line-height: 1.7;
+    padding: 12px 16px;
+    background: var(--soft-green);
+    border-radius: 10px;
+    border-left: 4px solid var(--mid-green);
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .kr-sentence.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    padding: 9px 16px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: white;
+    font-family: var(--font-kr);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-dark);
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+  .btn:active { transform: scale(0.97); }
+  .btn-blue { background: var(--soft-blue); border-color: var(--mid-blue); color: var(--dark-blue); font-weight: 700; }
+  .btn-green { background: var(--soft-green); border-color: var(--mid-green); color: var(--dark-green); font-weight: 700; }
+  .btn-gold { background: #FFF8E7; border-color: var(--accent-gold); color: #7A5C00; font-weight: 700; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
+  .btn-accent { background: #fff4e5; border-color: var(--accent-amber); color: #8B5C00; }
+  .btn-primary {
+    background: var(--dark-blue);
+    color: white;
+    border-color: var(--dark-blue);
+    font-weight: 700;
+    padding: 11px 24px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+  .btn-primary:hover { background: #1A5F9E; }
+
+  .speaker-icon { font-size: 16px; }
+  .check-icon { font-size: 15px; }
+
+  /* ===== ACCENT DROPDOWN ===== */
+  .accent-panel {
+    display: none;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 8px;
+    gap: 8px;
+    flex-wrap: wrap;
+    box-shadow: var(--card-shadow);
+  }
+  .accent-panel.open { display: flex; }
+  .accent-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: white;
+    font-family: var(--font-kr);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .accent-btn:hover { background: var(--soft-blue); border-color: var(--mid-blue); }
+  .accent-flag { font-size: 20px; }
+
+  /* ===== MEMORIZED TOGGLE ===== */
+  .memo-toggle {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-light);
+    cursor: pointer;
+  }
+  .memo-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: all 0.2s;
+    background: white;
+  }
+  .memo-check.checked { background: var(--mid-green); border-color: var(--dark-green); color: white; }
+
+  /* ===== REVIEW PAGE ===== */
+  .review-section {
+    display: none;
+  }
+  .review-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: var(--card-shadow);
+  }
+  .review-kr {
+    background: var(--soft-green);
+    padding: 20px 24px;
+    font-family: var(--font-serif-kr);
+    font-size: 18px;
+    color: var(--dark-green);
+    font-weight: 600;
+    line-height: 1.6;
+    border-bottom: 1.5px solid #C8E6C9;
+  }
+  .review-en-hidden {
+    padding: 16px 24px;
+    font-family: var(--font-en);
+    font-size: 17px;
+    color: transparent;
+    background: #f1efe8;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 12px 16px;
+    user-select: none;
+    transition: all 0.3s;
+    position: relative;
+    line-height: 1.5;
+  }
+  .review-en-hidden::after {
+    content: '▶ 영어 답 보기';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-mid);
+    font-family: var(--font-kr);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .review-en-hidden.revealed {
+    color: var(--text-dark);
+    background: white;
+    border: 1.5px solid var(--mid-blue);
+  }
+  .review-en-hidden.revealed::after { display: none; }
+
+  /* ===== QUIZ SECTION ===== */
+  .quiz-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border);
+  }
+  .quiz-q {
+    font-family: var(--font-en);
+    font-size: 19px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .quiz-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .quiz-choice {
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: white;
+    font-family: var(--font-serif-kr);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    line-height: 1.5;
+    color: var(--text-dark);
+  }
+  .quiz-choice:hover { background: var(--soft-blue); border-color: var(--mid-blue); }
+  .quiz-choice.correct { background: var(--soft-green); border-color: var(--mid-green); color: var(--dark-green); font-weight: 700; }
+  .quiz-choice.wrong { background: #FFEBEE; border-color: #E53935; color: #B71C1C; }
+  .quiz-result {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+  }
+  .quiz-result.correct-msg { background: var(--soft-green); color: var(--dark-green); }
+  .quiz-result.wrong-msg { background: #FFEBEE; color: #B71C1C; }
+
+  /* ===== COMPLETION BANNER ===== */
+  .completion-banner {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--dark-green) 100%);
+    color: white;
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    margin-bottom: 24px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+  .completion-icon { font-size: 48px; margin-bottom: 12px; }
+  .completion-title {
+    font-family: var(--font-serif-kr);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .completion-sub { font-size: 15px; opacity: 0.9; }
+  .completion-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 20px;
+  }
+  .completion-stat { text-align: center; }
+  .completion-stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    display: block;
+  }
+  .completion-stat-label {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  /* ===== PAGE TITLES ===== */
+  .page-title {
+    font-family: var(--font-serif-kr);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .page-title-icon { font-size: 22px; }
+
+  /* ===== SETTINGS PAGE ===== */
+  .settings-group {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: var(--card-shadow);
+  }
+  .settings-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .settings-item:last-child { border-bottom: none; }
+  .settings-label { font-size: 15px; font-weight: 500; }
+  .settings-desc { font-size: 12px; color: var(--text-light); margin-top: 3px; }
+  .toggle-switch {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: var(--border);
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle-switch.on { background: var(--mid-green); }
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: white;
+    top: 3px;
+    left: 3px;
+    transition: left 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .toggle-switch.on::after { left: 23px; }
+  select.settings-select {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: var(--font-kr);
+    font-size: 14px;
+    background: white;
+    color: var(--text-dark);
+  }
+
+  /* ===== WORD NOTE ===== */
+  .word-note {
+    display: none;
+    background: #FFFDE7;
+    border: 1.5px solid #FBC02D;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #5D4037;
+  }
+  .word-note.open { display: block; animation: fadeIn 0.2s; }
+
+  /* ===== HIDDEN PAGES ===== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== BOTTOM NEXT BTN ===== */
+  .nav-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1.5px solid var(--border);
+  }
+  .streak-badge {
+    background: #FFF4E5;
+    border: 1.5px solid var(--accent-amber);
+    border-radius: 20px;
+    padding: 7px 16px;
+    font-size: 13px;
+    color: #7A4800;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ===== TTS WARNING ===== */
+  .tts-info {
+    background: var(--soft-blue);
+    border: 1px solid var(--mid-blue);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--dark-blue);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="header-title">📚 기본 영어 500문장</div>
+      <div class="header-sub">하루 10개 · 50일 완성 학습 프로그램</div>
+    </div>
+    <div class="header-badge" id="streakHeader">🔥 연속 1일</div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('learn')">📖 오늘 학습</button>
+    <button class="nav-tab" onclick="showPage('review')">🔁 복습 퀴즈</button>
+    <button class="nav-tab" onclick="showPage('progress')">📊 학습 현황</button>
+    <button class="nav-tab" onclick="showPage('settings')">⚙️ 설정</button>
+  </div>
+</div>
+
+<!-- ===== LEARN PAGE ===== -->
+<div class="main page active" id="page-learn">
+
+  <div class="day-selector">
+    <button class="day-nav-btn" onclick="changeDay(-1)">◀</button>
+    <div class="day-display">
+      Day <span id="dayNum">1</span>
+      <span class="day-range" id="dayRange">문장 1–10</span>
+    </div>
+    <button class="day-nav-btn" onclick="changeDay(1)">▶</button>
+    <div class="day-unit-tag" id="dayUnitTag">Unit 01</div>
+  </div>
+
+  <div class="tts-info">
+    💡 소리 듣기는 브라우저의 음성 합성(TTS) 기능을 사용합니다. 기기와 브라우저에 따라 사용 가능한 목소리가 다를 수 있습니다.
+  </div>
+
+  <div id="sentenceCards"></div>
+
+  <div class="nav-bottom">
+    <div class="streak-badge" id="streakBadge">🔥 연속 1일째</div>
+    <button class="btn btn-primary" id="completeBtn" onclick="completeDayLearning()">
+      오늘 학습 완료 ✓
+    </button>
+  </div>
+</div>
+
+<!-- ===== REVIEW PAGE ===== -->
+<div class="main page" id="page-review">
+  <div class="page-title"><span class="page-title-icon">🔁</span>복습 퀴즈</div>
+  <p style="font-size:14px;color:var(--text-mid);margin-bottom:16px;">한글 뜻을 보고 영어 문장의 의미를 맞혀보세요.</p>
+  <div id="quizCards"></div>
+  <div style="text-align:center;margin-top:20px;">
+    <button class="btn btn-primary" onclick="generateQuiz()">새 퀴즈 생성</button>
+  </div>
+</div>
+
+<!-- ===== PROGRESS PAGE ===== -->
+<div class="main page" id="page-progress">
+  <div class="page-title"><span class="page-title-icon">📊</span>학습 현황</div>
+
+  <div class="progress-section">
+    <div class="progress-header">
+      <div class="progress-title">전체 진도</div>
+      <div class="progress-count" id="progressCount">0 / 500문장</div>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-sub" id="progressSub">아직 시작하지 않았어요. 오늘 첫 학습을 시작해보세요!</div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-title" style="margin-bottom:14px;">일별 완료 현황 (50일)</div>
+    <div class="day-dots" id="dayDots"></div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-title" style="margin-bottom:14px;">학습 통계</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div style="text-align:center;background:var(--soft-blue);border-radius:10px;padding:14px;">
+        <div style="font-size:24px;font-weight:700;color:var(--dark-blue)" id="stat-days">0</div>
+        <div style="font-size:12px;color:var(--text-mid);margin-top:4px;">완료 일수</div>
+      </div>
+      <div style="text-align:center;background:var(--soft-green);border-radius:10px;padding:14px;">
+        <div style="font-size:24px;font-weight:700;color:var(--dark-green)" id="stat-streak">0</div>
+        <div style="font-size:12px;color:var(--text-mid);margin-top:4px;">연속 학습일</div>
+      </div>
+      <div style="text-align:center;background:#FFF8E7;border-radius:10px;padding:14px;">
+        <div style="font-size:24px;font-weight:700;color:#7A4800" id="stat-memo">0</div>
+        <div style="font-size:12px;color:var(--text-mid);margin-top:4px;">암기 완료</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-title" style="margin-bottom:14px;">문법 유닛 진도</div>
+    <div id="unitProgress"></div>
+  </div>
+</div>
+
+<!-- ===== SETTINGS PAGE ===== -->
+<div class="main page" id="page-settings">
+  <div class="page-title"><span class="page-title-icon">⚙️</span>설정</div>
+
+  <div class="settings-group">
+    <div class="settings-item">
+      <div>
+        <div class="settings-label">하루 학습 목표</div>
+        <div class="settings-desc">현재: 하루 10문장 (총 50일)</div>
+      </div>
+      <select class="settings-select" id="dailyGoalSelect">
+        <option value="10" selected>10문장 (50일)</option>
+        <option value="20">20문장 (25일)</option>
+        <option value="5">5문장 (100일)</option>
+      </select>
+    </div>
+    <div class="settings-item">
+      <div>
+        <div class="settings-label">기본 음성 지역</div>
+        <div class="settings-desc">카드에서 기본으로 사용할 발음</div>
+      </div>
+      <select class="settings-select" id="defaultAccent">
+        <option value="en-US">🇺🇸 북미</option>
+        <option value="en-GB">🇬🇧 영국</option>
+        <option value="en-AU">🇦🇺 호주</option>
+      </select>
+    </div>
+    <div class="settings-item">
+      <div>
+        <div class="settings-label">자동으로 해석 보이기</div>
+        <div class="settings-desc">카드 로드 시 한글 해석 자동 표시</div>
+      </div>
+      <div class="toggle-switch" id="autoKrToggle" onclick="this.classList.toggle('on')"></div>
+    </div>
+    <div class="settings-item">
+      <div>
+        <div class="settings-label">복습 알림</div>
+        <div class="settings-desc">학습 완료 후 복습 권유</div>
+      </div>
+      <div class="toggle-switch on" id="reviewReminderToggle" onclick="this.classList.toggle('on')"></div>
+    </div>
+    <div class="settings-item">
+      <div>
+        <div class="settings-label">글자 크기</div>
+        <div class="settings-desc">영어 문장 글자 크기</div>
+      </div>
+      <select class="settings-select" id="fontSizeSelect" onchange="changeFontSize(this.value)">
+        <option value="17">보통</option>
+        <option value="20" selected>크게</option>
+        <option value="23">매우 크게</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="settings-group">
+    <div class="settings-item">
+      <div>
+        <div class="settings-label" style="color:#C62828;">전체 학습 기록 초기화</div>
+        <div class="settings-desc">모든 진도와 암기 기록이 삭제됩니다</div>
+      </div>
+      <button class="btn" style="color:#C62828;border-color:#EF9A9A;" onclick="resetAll()">초기화</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SENTENCES = [
+  // Unit 01
+  { num: 1, en: "I'm cold. Can you close the window, please?", kr: "나 추워. 창문 좀 닫아줄래?", unit: "Unit 01" },
+  { num: 2, en: "My brother is afraid of dogs.", kr: "나의 오빠는 강아지를 무서워해.", unit: "Unit 01" },
+  { num: 3, en: "It's 10:00. You're late again.", kr: "10시야. 너 또 늦었어.", unit: "Unit 01" },
+  { num: 4, en: "Tom isn't interested in politics. He's interested in music.", kr: "Tom은 정치에 관심이 없어. 그는 음악에 관심이 있어.", unit: "Unit 01" },
+  // Unit 02
+  { num: 5, en: "Am I late? No, you are on time.", kr: "나 늦었어? / 아니, 제시간에 맞춰왔어.", unit: "Unit 02" },
+  { num: 6, en: "Your shoes are nice. Are they new?", kr: "너 신발 멋지다. 새로 산 것이니?", unit: "Unit 02" },
+  { num: 7, en: "This hotel isn't very good. Why is it so expensive?", kr: "이 호텔은 그리 좋지 않은데, 왜 이렇게 비싸니?", unit: "Unit 02" },
+  { num: 8, en: "What's your phone number?", kr: "너의 전화번호가 무엇이니?", unit: "Unit 02" },
+  // Unit 03
+  { num: 9, en: "You're not listening to me.", kr: "너 내 말을 안 듣고 있구나.", unit: "Unit 03" },
+  { num: 10, en: "Please be quiet. I'm working.", kr: "제발 조용히 해줘. 나 일하는 중이야.", unit: "Unit 03" },
+  { num: 11, en: "Look, there's Sarah. She's wearing a brown coat.", kr: "저기 봐, 사라가 있어. 그녀는 갈색 코트를 입고 있어.", unit: "Unit 03" },
+  { num: 12, en: "We're having dinner now. Can I call you later?", kr: "우리 지금 저녁 식사 중이야. 내가 나중에 전화해도 될까?", unit: "Unit 03" },
+  // Unit 04
+  { num: 13, en: "Why are you wearing a coat? It's not cold.", kr: "너 왜 코트를 입고 있니? 지금 춥지 않아.", unit: "Unit 04" },
+  { num: 14, en: "Who are you waiting for? Are you waiting for Sue?", kr: "누구 기다리고 있어? 너 Sue 기다리고 있니?", unit: "Unit 04" },
+  { num: 15, en: "Are you leaving now? Yes, I am.", kr: "너 지금 떠나? / 응", unit: "Unit 04" },
+  { num: 16, en: "Are your friends staying at a hotel?", kr: "너의 친구들은 호텔에 머물고 있니?", unit: "Unit 04" },
+  // Unit 05
+  { num: 17, en: "I work in an office. My brother works in a bank.", kr: "나는 사무실에서 일하고, 내 동생은 은행에서 일해.", unit: "Unit 05" },
+  { num: 18, en: "Lucy lives in Houston. Her parents live in Chicago.", kr: "Lucy는 휴스톤에 살고 있고, 그녀의 부모님은 시카고에 살고 있어.", unit: "Unit 05" },
+  { num: 19, en: "It rains a lot in the winter.", kr: "겨울에는 비가 많이 와.", unit: "Unit 05" },
+  { num: 20, en: "It costs a lot of money to build a hospital.", kr: "병원을 짓는 데 많은 돈이 들어.", unit: "Unit 05" },
+  { num: 21, en: "Sue drinks tea, but she doesn't drink coffee.", kr: "Sue는 차는 마시지만, 커피는 마시지 않아.", unit: "Unit 06" },
+  { num: 22, en: "The weather is usually nice. It doesn't rain very often.", kr: "보통 날씨가 좋아. 비가 자주 내리지 않아.", unit: "Unit 06" },
+  { num: 23, en: "Sometimes he is late, but it doesn't happen very often.", kr: "때때로 그는 늦지만, 그렇게 자주 일어나는 일은 아니야.", unit: "Unit 06" },
+  { num: 24, en: "Bill doesn't do his job very well.", kr: "Bill은 그의 일을 잘 못해.", unit: "Unit 06" },
+  { num: 25, en: "Do you play tennis? No, I don't.", kr: "너 테니스 치니? / 아니, 치지 않아.", unit: "Unit 07" },
+  { num: 26, en: "Do your parents speak English? Yes, they do.", kr: "너의 부모님은 영어로 말할 줄 아시니? / 응, 할 줄 아셔.", unit: "Unit 07" },
+  { num: 27, en: "Does Gary work hard? Yes, he does.", kr: "Gary는 열심히 일하니? / 응, 열심히 해.", unit: "Unit 07" },
+  { num: 28, en: "Does your sister live in Vancouver? No, she doesn't.", kr: "너의 여동생은 밴쿠버에 사니? / 아니", unit: "Unit 07" },
+  { num: 29, en: "Why are you under the table? What are you doing?", kr: "왜 탁자 밑에 들어가 있니? 뭘 하고 있는 거니?", unit: "Unit 08" },
+  { num: 30, en: "I'm tired. I want to go home.", kr: "나 피곤해. 나 집에 가고 싶어.", unit: "Unit 08" },
+  { num: 31, en: "I don't understand. What do you mean?", kr: "이해를 못하겠어. 무슨 뜻이니?", unit: "Unit 08" },
+  { num: 32, en: "Do you know that girl? Yes, but I don't remember her name.", kr: "저 여자 아니? / 응, 그러나 이름은 기억나지 않아.", unit: "Unit 08" },
+  { num: 33, en: "I have blue eyes.", kr: "나는 파란 눈을 가지고 있어.", unit: "Unit 09" },
+  { num: 34, en: "Our car has four doors.", kr: "우리 차는 네 개의 문을 가지고 있어.", unit: "Unit 09" },
+  { num: 35, en: "It's a nice house, but it doesn't have a garage.", kr: "멋진 집이야, 하지만 차고가 없어.", unit: "Unit 09" },
+  { num: 36, en: "What kind of car does she have?", kr: "그녀는 어떤 종류의 차를 가지고 있니?", unit: "Unit 09" },
+  { num: 37, en: "What do you have in your bag?", kr: "너의 가방에 무엇이 들어 있니?", unit: "Unit 09" },
+  { num: 38, en: "Where was Kate yesterday?", kr: "어제 Kate는 어디에 있었니?", unit: "Unit 10" },
+  { num: 39, en: "They weren't here last Sunday.", kr: "그들은 지난 일요일에 여기에 오지 않았어.", unit: "Unit 10" },
+  { num: 40, en: "We were hungry after the trip, but we weren't tired.", kr: "여행 후 우리는 배고팠어, 하지만 피곤하지는 않았어.", unit: "Unit 10" },
+  { num: 41, en: "Was the weather nice when you were on vacation?", kr: "너가 휴가 갔을 때 날씨 좋았니?", unit: "Unit 10" },
+  { num: 42, en: "I brush my teeth every morning.", kr: "나는 매일 아침 양치를 해.", unit: "Unit 11" },
+  { num: 43, en: "Terry worked in a bank from 1996 to 2003.", kr: "Terry는 1996년부터 2003년까지 은행에서 일했어.", unit: "Unit 11" },
+  { num: 44, en: "Yesterday it rained all morning. It stopped at lunchtime.", kr: "어제 아침 내내 비가 내렸어. 점심에서야 그쳤어.", unit: "Unit 11" },
+  { num: 45, en: "Caroline went to the movies three times last week.", kr: "Caroline은 저번 주에 세 번 영화 보러 갔어.", unit: "Unit 11" },
+  { num: 46, en: "James came into the room, took off his coat, and sat down.", kr: "James는 방에 들어와서, 그의 코트를 벗고, 그리고 앉았어.", unit: "Unit 11" },
+  { num: 47, en: "Does she go out often?", kr: "그녀는 자주 외출하니?", unit: "Unit 12" },
+  { num: 48, en: "Did your parents have a good trip? Yes, they did.", kr: "부모님들께서 좋은 여행을 하셨니? / 응.", unit: "Unit 12" },
+  { num: 49, en: "We went to the movies, but we didn't enjoy the film.", kr: "우리 영화 보러 갔었는데, 그 영화 즐겁지 않았어.", unit: "Unit 12" },
+  { num: 50, en: "Did it rain on Sunday? Yes, it did.", kr: "지난주 일요일에 비 왔니? / 응, 왔어.", unit: "Unit 12" },
+  { num: 51, en: "What did he say? I don't know. I wasn't listening.", kr: "그가 뭐라고 했니? / 모르겠어. 듣고 있지 않았어.", unit: "Unit 13" },
+  { num: 52, en: "It was raining, so we didn't go out.", kr: "비가 왔었어. 그래서 우리는 외출하지 않았어.", unit: "Unit 13" },
+  { num: 53, en: "In 2001 we were living in Japan.", kr: "2001년에 우리는 일본에 살고 있었어.", unit: "Unit 13" },
+  { num: 54, en: "The sun was shining, and the birds were singing.", kr: "태양은 빛나고, 새들은 노래하네.", unit: "Unit 13" },
+  { num: 55, en: "Were you watching television when I called you?", kr: "내가 전화 했을 때, 티비 보고 있었니?", unit: "Unit 14" },
+  { num: 56, en: "It didn't rain while we were on vacation.", kr: "우리의 휴가 동안에, 비가 오지 않았어.", unit: "Unit 14" },
+  { num: 57, en: "It wasn't raining when I got up.", kr: "내가 일어났을 때, 비가 오고 있지 않았어.", unit: "Unit 14" },
+  { num: 58, en: "Kelly fell asleep while she was reading.", kr: "Kelly는 책을 읽는 도중 잠이 들었어.", unit: "Unit 14" },
+  { num: 59, en: "I used to read a lot of books, but I don't read much these days.", kr: "나는 과거에 책을 많이 읽곤 했지만, 요즘엔 많이 읽지 않아.", unit: "Unit 15" },
+  { num: 60, en: "Helen used to have a piano, but she sold it a few years ago.", kr: "Helen은 피아노를 가지고 있었지만, 몇 년 전 그것을 팔았어.", unit: "Unit 15" },
+  { num: 61, en: "When I was a child, I didn't use to like tomatoes.", kr: "내가 어렸을 땐, 토마토를 좋아하지 않았어.", unit: "Unit 15" },
+  { num: 62, en: "Where did you use to live before you came here?", kr: "여기에 오기 전에 어디에 살았었니?", unit: "Unit 15" },
+  { num: 63, en: "She has had many different jobs and has lived in many places.", kr: "그녀는 여태까지 많고 다양한 직업을 가져왔고, 많은 장소에 살았어.", unit: "Unit 16" },
+  { num: 64, en: "How many times has Brazil won the World Cup?", kr: "몇 번이나 브라질이 월드컵에서 우승했니?", unit: "Unit 16" },
+  { num: 65, en: "My sister has never traveled by plane.", kr: "내 여동생은 비행기로 한번도 여행한적 없어.", unit: "Unit 16" },
+  { num: 66, en: "I've never ridden a horse.", kr: "나는 한번도 말을 타본 적이 없어.", unit: "Unit 16" },
+  { num: 67, en: "They have been married for five years.", kr: "그들은 결혼 한 지 5년 되었어.", unit: "Unit 17" },
+  { num: 68, en: "She has lived there all her life.", kr: "그녀는 평생 그 장소에 살아왔어.", unit: "Unit 17" },
+  { num: 69, en: "I've been studying in Germany for two years.", kr: "나는 2년 동안 독일에서 공부하고 있어.", unit: "Unit 17" },
+  { num: 70, en: "It's been raining all day.", kr: "하루 종일 비가 내리고 있어.", unit: "Unit 17" },
+  { num: 71, en: "Jane is in Brazil. She has been there for three days.", kr: "Jane은 브라질에 있어. 그녀는 그곳에 3일 동안 있었어.", unit: "Unit 18" },
+  { num: 72, en: "Jane is in Brazil. She has been there since Monday.", kr: "Jane은 브라질에 있어. 그녀는 그곳에 월요일부터 있었어.", unit: "Unit 18" },
+  { num: 73, en: "We've been waiting since 9:00.", kr: "우리는 9시부터 기다리고 있었어.", unit: "Unit 18" },
+  { num: 74, en: "Susan started her new job three weeks ago.", kr: "Susan은 3주 전에 그녀의 새로운 일을 시작했어.", unit: "Unit 18" },
+  { num: 75, en: "I've lost my passport.", kr: "나 여권을 잃어 버렸어.", unit: "Unit 19" },
+  { num: 76, en: "Where's Rebecca? She's gone to bed.", kr: "Rebecca는 어디에 있니? / 그녀는 자러갔어.", unit: "Unit 19" },
+  { num: 77, en: "Is Peter here? No, he's gone home.", kr: "Peter가 여기에 있니? / 아니, 그는 집에 갔어.", unit: "Unit 19" },
+  { num: 78, en: "I lost my key yesterday.", kr: "나 어제 열쇠를 잃어버렸어.", unit: "Unit 19" },
+  { num: 79, en: "Are Diane and Paul here? Yes, they just arrived.", kr: "Diane과 Paul이 여기에 있니? / 응 그들은 방금 도착했어.", unit: "Unit 20" },
+  { num: 80, en: "What time are Diane and Paul coming? They already arrived.", kr: "몇 시에 Diane과 Paul이 오니? / 그들은 이미 도착했어.", unit: "Unit 20" },
+  { num: 81, en: "Are Diane and Paul here? No, they haven't arrived yet.", kr: "Diane과 Paul이 여기에 있니? / 아니, 그들은 아직 도착하지 않았어.", unit: "Unit 20" },
+  { num: 82, en: "Did Diane and Paul arrive yet? No, not yet.", kr: "Diane과 Paul 벌써 도착 했니? / 아직.", unit: "Unit 20" },
+  { num: 83, en: "We didn't take a vacation last year.", kr: "우리는 작년에 휴가를 떠나지 않았어.", unit: "Unit 21" },
+  { num: 84, en: "William Shakespeare lived from 1564 to 1616. He was a writer.", kr: "윌리암 셰익스피어는 1564년부터 1616까지 살았고, 그는 작가였어.", unit: "Unit 21" },
+  { num: 85, en: "What time did Andy go out?", kr: "Andy는 몇 시에 외출했니?", unit: "Unit 21" },
+  { num: 86, en: "Have you ever been to Spain?", kr: "스페인에 가본 적 있니?", unit: "Unit 21" },
+  { num: 87, en: "Oranges are imported into Canada.", kr: "오렌지는 캐나다로 수입 돼.", unit: "Unit 22" },
+  { num: 88, en: "I am never invited to parties.", kr: "나는 파티에 초대된 적 없어.", unit: "Unit 22" },
+  { num: 89, en: "When was the telephone invented?", kr: "전화기는 언제 발명되었니?", unit: "Unit 22" },
+  { num: 90, en: "I was born in Colombia in 1989.", kr: "나는 콜럼비아에서 1989에 태어났어.", unit: "Unit 22" },
+  { num: 91, en: "My car is at the garage. It is being repaired.", kr: "내 자동차는 차고에 있어. 그것은 수리중이야.", unit: "Unit 23" },
+  { num: 92, en: "Some new houses are being built across from the park.", kr: "몇몇의 새 집들이 공원 반대편에 지어지고 있어.", unit: "Unit 23" },
+  { num: 93, en: "Has this shirt been washed?", kr: "이 셔츠는 세탁된 것이니?", unit: "Unit 23" },
+  { num: 94, en: "The room isn't dirty any more. It has been cleaned.", kr: "이 방은 더 이상 더럽지 않아, 청소되었거든.", unit: "Unit 23" },
+  { num: 95, en: "It wasn't raining, so we didn't need an umbrella.", kr: "비가 오지 않아서, 우리는 우산이 필요 없었어.", unit: "Unit 24" },
+  { num: 96, en: "How was the window broken?", kr: "어떻게 창문이 깨진 거니?", unit: "Unit 24" },
+  { num: 97, en: "Tom has never ridden a horse.", kr: "Tom은 말을 타본 적이 없어.", unit: "Unit 24" },
+  { num: 98, en: "Chris doesn't go out very often.", kr: "Chris는 자주 외출 하지 않아.", unit: "Unit 24" },
+  { num: 99, en: "I made a cake yesterday.", kr: "어제 케이크를 만들었어.", unit: "Unit 25" },
+  { num: 100, en: "I have made some coffee.", kr: "커피 몇 잔을 타왔어.", unit: "Unit 25" },
+  { num: 101, en: "Somebody broke this window last night.", kr: "누군가 어젯밤 이 창문을 깨트렸어.", unit: "Unit 25" },
+  { num: 102, en: "Somebody has broken this window.", kr: "누군가 이 창문을 깨트렸어. (현재도 깨져있음)", unit: "Unit 25" },
+  { num: 103, en: "Andrew is playing tennis tomorrow.", kr: "Andrew는 내일 테니스를 칠거야.", unit: "Unit 26" },
+  { num: 104, en: "Sophie is going to the dentist on Friday.", kr: "Sophie는 금요일에 치과에 갈거야.", unit: "Unit 26" },
+  { num: 105, en: "Lisa isn't coming to the party next week.", kr: "Lisa는 다음주 파티에 오지 않을 거야.", unit: "Unit 26" },
+  { num: 106, en: "The plane arrives in New York at 7:30 tomorrow morning.", kr: "그 비행기는 내일 아침 7시 30분에 뉴욕에 도착해.", unit: "Unit 26" },
+  { num: 107, en: "I'm not going to have breakfast this morning. I'm not hungry.", kr: "나는 아침에 아침식사 하지 않을 거야. 나는 배고프지 않아.", unit: "Unit 27" },
+  { num: 108, en: "Are you going to invite Martin to your party?", kr: "파티에 Martin을 초대할 거니?", unit: "Unit 27" },
+  { num: 109, en: "I am playing tennis with Julia tomorrow.", kr: "내일 Julia와 테니스를 치기로 했어.", unit: "Unit 27" },
+  { num: 110, en: "Look at the sky! It's going to rain.", kr: "하늘을 봐, 비가 올 것 같아.", unit: "Unit 27" },
+  { num: 111, en: "You can call me tonight, I'll be at home.", kr: "오늘 밤 전화해도 돼, 나 집에 있을 거야.", unit: "Unit 28" },
+  { num: 112, en: "Leave the old bread in the yard. The birds will eat it.", kr: "오래된 빵을 마당에 놔둬. 새들이 그것을 먹을 거야.", unit: "Unit 28" },
+  { num: 113, en: "I think Kelly will pass her driver's test.", kr: "내 생각에 Kelly는 운전면허시험에 통과 할 것 같아.", unit: "Unit 28" },
+  { num: 114, en: "Are you going to take your driver's test tomorrow?", kr: "내일 운전면허 시험을 치룰 거니?", unit: "Unit 28" },
+  { num: 115, en: "My suitcase is very heavy. I'll carry it for you.", kr: "내 여행가방은 매우 무거워. / 내가 너를 위해 들어줄게.", unit: "Unit 29" },
+  { num: 116, en: "I'm tired. I think I'll go to bed early tonight.", kr: "피곤해. 내 생각에 오늘밤 일찍 잠들 것 같아.", unit: "Unit 29" },
+  { num: 117, en: "What shall we have for dinner?", kr: "저녁으로 어떤 걸 먹을까?", unit: "Unit 29" },
+  { num: 118, en: "Should I call you tonight? OK.", kr: "오늘 밤 전화해도 될까? / 응.", unit: "Unit 29" },
+  { num: 119, en: "Buy a lottery ticket. You might be lucky.", kr: "복권을 한 장 사봐. 행운이 따를 지도 몰라.", unit: "Unit 30" },
+  { num: 120, en: "I might play tennis tomorrow.", kr: "내일 테니스를 칠지도 몰라.", unit: "Unit 30" },
+  { num: 121, en: "Sue might not come to the party.", kr: "Sue는 파티에 오지 않을지도 몰라.", unit: "Unit 30" },
+  { num: 122, en: "I may go to the movies tonight.", kr: "나는 아마 오늘밤 영화 보러 갈 거야.", unit: "Unit 30" },
+];
+
+// Fill remaining with placeholders (123-500)
+for (let i = 123; i <= 500; i++) {
+  const unitNum = Math.ceil(i / 4);
+  SENTENCES.push({ num: i, en: `Sentence ${i} - coming soon`, kr: `${i}번 문장 - 준비 중`, unit: `Unit ${String(unitNum).padStart(2,'0')}` });
+}
+
+let currentDay = 1;
+let memorized = JSON.parse(localStorage.getItem('memorized') || '[]');
+let completedDays = JSON.parse(localStorage.getItem('completedDays') || '[]');
+let streak = parseInt(localStorage.getItem('streak') || '1');
+let enFontSize = 20;
+
+function getDaySentences(day) {
+  const start = (day - 1) * 10;
+  return SENTENCES.slice(start, start + 10);
+}
+
+function speak(text, lang) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang;
+    u.rate = 0.85;
+    window.speechSynthesis.speak(u);
+  } else {
+    alert('이 브라우저는 음성 기능을 지원하지 않습니다.');
+  }
+}
+
+function toggleKr(id) {
+  const el = document.getElementById('kr-' + id);
+  el.classList.toggle('visible');
+}
+
+function toggleAccentPanel(id) {
+  const el = document.getElementById('accent-' + id);
+  el.classList.toggle('open');
+}
+
+function toggleMemo(num) {
+  const idx = memorized.indexOf(num);
+  if (idx === -1) memorized.push(num);
+  else memorized.splice(idx, 1);
+  localStorage.setItem('memorized', JSON.stringify(memorized));
+  renderCards();
+}
+
+function renderCards() {
+  const sentences = getDaySentences(currentDay);
+  const container = document.getElementById('sentenceCards');
+  const units = [...new Set(sentences.map(s => s.unit))];
+
+  document.getElementById('dayNum').textContent = currentDay;
+  document.getElementById('dayRange').textContent = `문장 ${(currentDay-1)*10+1}–${currentDay*10}`;
+  document.getElementById('dayUnitTag').textContent = units.join(', ');
+
+  let html = '';
+  const autoKr = document.getElementById('autoKrToggle')?.classList.contains('on');
+
+  sentences.forEach(s => {
+    const isMemo = memorized.includes(s.num);
+    html += `
+    <div class="sentence-card" id="card-${s.num}">
+      <div class="card-top">
+        <div class="card-num">${s.num}</div>
+        <div class="card-unit">${s.unit}</div>
+      </div>
+      <div class="en-sentence" style="font-size:${enFontSize}px">${s.en}</div>
+      <div class="kr-sentence ${autoKr ? 'visible' : ''}" id="kr-${s.num}">${s.kr}</div>
+      <div class="card-actions">
+        <button class="btn btn-blue btn-sm" onclick="speak('${s.en.replace(/'/g,"\\'")}', '${getDefaultAccent()}')">
+          <span class="speaker-icon">🔊</span> 듣기
+        </button>
+        <button class="btn btn-sm btn-accent" onclick="toggleAccentPanel(${s.num})">
+          🌍 다른 발음
+        </button>
+        <button class="btn btn-green btn-sm" onclick="toggleKr(${s.num})">
+          👁 해석
+        </button>
+        <div class="memo-toggle" onclick="toggleMemo(${s.num})">
+          <div class="memo-check ${isMemo ? 'checked' : ''}">${isMemo ? '✓' : ''}</div>
+          <span>${isMemo ? '암기완료' : '암기표시'}</span>
+        </div>
+      </div>
+      <div class="accent-panel" id="accent-${s.num}">
+        <button class="accent-btn" onclick="speak('${s.en.replace(/'/g,"\\'")}','en-US')"><span class="accent-flag">🇺🇸</span> 북미</button>
+        <button class="accent-btn" onclick="speak('${s.en.replace(/'/g,"\\'")}','en-GB')"><span class="accent-flag">🇬🇧</span> 영국</button>
+        <button class="accent-btn" onclick="speak('${s.en.replace(/'/g,"\\'")}','en-AU')"><span class="accent-flag">🇦🇺</span> 호주</button>
+      </div>
+      <div class="word-note" id="note-${s.num}"></div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function getDefaultAccent() {
+  return document.getElementById('defaultAccent')?.value || 'en-US';
+}
+
+function completeDayLearning() {
+  if (!completedDays.includes(currentDay)) {
+    completedDays.push(currentDay);
+    localStorage.setItem('completedDays', JSON.stringify(completedDays));
+    streak = completedDays.length;
+    localStorage.setItem('streak', streak);
+  }
+  showCompletionAndReview();
+}
+
+function showCompletionAndReview() {
+  const sentences = getDaySentences(currentDay);
+  const container = document.getElementById('sentenceCards');
+  const memoCount = sentences.filter(s => memorized.includes(s.num)).length;
+
+  let html = `
+  <div class="completion-banner">
+    <div class="completion-icon">🎉</div>
+    <div class="completion-title">Day ${currentDay} 학습 완료!</div>
+    <div class="completion-sub">오늘도 열심히 공부하셨어요. 수고하셨습니다!</div>
+    <div class="completion-stats">
+      <div class="completion-stat">
+        <span class="completion-stat-num">${sentences.length}</span>
+        <span class="completion-stat-label">학습 문장</span>
+      </div>
+      <div class="completion-stat">
+        <span class="completion-stat-num">${memoCount}</span>
+        <span class="completion-stat-label">암기 완료</span>
+      </div>
+      <div class="completion-stat">
+        <span class="completion-stat-num">${streak}</span>
+        <span class="completion-stat-label">연속 학습일</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-title"><span class="page-title-icon">📝</span>한글만 보고 영어 떠올리기</div>
+  <p style="font-size:14px;color:var(--text-mid);margin-bottom:16px;">한글 해석을 보고 영어 문장을 떠올려 보세요. 클릭하면 영어 문장을 확인할 수 있어요.</p>`;
+
+  sentences.forEach(s => {
+    html += `
+    <div class="review-card">
+      <div class="review-kr">${s.kr}</div>
+      <div class="review-en-hidden" onclick="this.textContent='${s.en.replace(/'/g,"\\'")}';this.classList.add('revealed');">${s.en}</div>
+    </div>`;
+  });
+
+  html += `
+  <div style="text-align:center;margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <button class="btn btn-primary" onclick="renderCards();document.getElementById('completeBtn').style.display='flex';">다시 학습하기</button>
+    <button class="btn btn-green" onclick="changeDay(1);renderCards();">Day ${Math.min(currentDay+1,50)} 시작하기 →</button>
+  </div>`;
+
+  container.innerHTML = html;
+  document.getElementById('completeBtn').style.display = 'none';
+  updateStreakBadge();
+}
+
+function changeDay(dir) {
+  const newDay = currentDay + dir;
+  if (newDay >= 1 && newDay <= 50) {
+    currentDay = newDay;
+    renderCards();
+    document.getElementById('completeBtn').style.display = 'flex';
+  }
+}
+
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  event.target.classList.add('active');
+
+  if (page === 'progress') renderProgress();
+  if (page === 'review') generateQuiz();
+}
+
+function renderProgress() {
+  const total = memorized.length;
+  const days = completedDays.length;
+  const pct = Math.round((days * 10 / 500) * 100);
+
+  document.getElementById('progressCount').textContent = `${days * 10} / 500문장`;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressSub').textContent = days === 0
+    ? '아직 시작하지 않았어요. 오늘 첫 학습을 시작해보세요!'
+    : `${days}일 완료 · 전체의 ${pct}% 진행 중`;
+  document.getElementById('stat-days').textContent = days;
+  document.getElementById('stat-streak').textContent = streak;
+  document.getElementById('stat-memo').textContent = total;
+
+  // Day dots
+  let dotsHtml = '';
+  for (let d = 1; d <= 50; d++) {
+    const cls = completedDays.includes(d) ? 'done' : (d === currentDay ? 'current' : '');
+    dotsHtml += `<div class="day-dot ${cls}" onclick="currentDay=${d};showPage('learn');renderCards();" title="Day ${d}">${d}</div>`;
+  }
+  document.getElementById('dayDots').innerHTML = dotsHtml;
+
+  // Unit progress
+  const units = [...new Set(SENTENCES.map(s => s.unit))];
+  let unitHtml = '';
+  units.slice(0, 20).forEach(u => {
+    const unitSentences = SENTENCES.filter(s => s.unit === u);
+    const done = unitSentences.filter(s => completedDays.includes(Math.ceil(s.num / 10))).length;
+    const pct = Math.round(done / unitSentences.length * 100);
+    unitHtml += `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+      <div style="width:70px;font-size:12px;color:var(--text-mid);font-weight:500;">${u}</div>
+      <div style="flex:1;background:#f1efe8;border-radius:6px;height:8px;overflow:hidden;">
+        <div style="width:${pct}%;height:100%;background:${pct===100?'var(--mid-green)':'var(--mid-blue)'};border-radius:6px;transition:width 0.5s;"></div>
+      </div>
+      <div style="width:36px;text-align:right;font-size:12px;color:var(--text-mid);">${pct}%</div>
+    </div>`;
+  });
+  document.getElementById('unitProgress').innerHTML = unitHtml;
+}
+
+function generateQuiz() {
+  const learned = SENTENCES.filter(s => completedDays.includes(Math.ceil(s.num / 10)));
+  if (learned.length < 4) {
+    document.getElementById('quizCards').innerHTML = `
+    <div style="text-align:center;padding:40px;color:var(--text-mid);">
+      <div style="font-size:48px;margin-bottom:16px;">📚</div>
+      <div style="font-size:16px;font-weight:500;">퀴즈를 시작하려면<br>최소 4문장 이상 학습이 필요해요!</div>
+      <button class="btn btn-primary" style="margin-top:20px;" onclick="showPage('learn')">학습 시작하기</button>
+    </div>`;
+    return;
+  }
+
+  const shuffled = [...learned].sort(() => Math.random() - 0.5);
+  const quiz = shuffled.slice(0, Math.min(5, shuffled.length));
+  let html = '';
+
+  quiz.forEach((q, i) => {
+    const wrongs = learned.filter(s => s.num !== q.num).sort(() => Math.random() - 0.5).slice(0, 3);
+    const choices = [q, ...wrongs].sort(() => Math.random() - 0.5);
+
+    html += `
+    <div class="quiz-card">
+      <div style="font-size:12px;color:var(--text-light);margin-bottom:10px;">문제 ${i+1} / ${Math.min(5, quiz.length)}</div>
+      <div class="quiz-q">${q.en}</div>
+      <div class="quiz-choices">
+        ${choices.map(c => `
+          <button class="quiz-choice" onclick="checkAnswer(this, ${c.num === q.num}, '${q.kr.replace(/'/g,"\\'")}')">
+            ${c.kr}
+          </button>`).join('')}
+      </div>
+      <div class="quiz-result" id="qr-${i}"></div>
+    </div>`;
+  });
+
+  document.getElementById('quizCards').innerHTML = html;
+}
+
+let quizIdx = 0;
+function checkAnswer(btn, isCorrect, correctKr) {
+  const siblings = btn.parentElement.querySelectorAll('.quiz-choice');
+  siblings.forEach(b => b.disabled = true);
+  const result = btn.closest('.quiz-card').querySelector('.quiz-result');
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    result.textContent = '✓ 정답입니다! 잘 하셨어요!';
+    result.className = 'quiz-result correct-msg';
+  } else {
+    btn.classList.add('wrong');
+    result.innerHTML = `✗ 틀렸어요. 정답: <strong>${correctKr}</strong>`;
+    result.className = 'quiz-result wrong-msg';
+    siblings.forEach(b => { if (b.textContent.trim() === correctKr.trim()) b.classList.add('correct'); });
+  }
+  result.style.display = 'block';
+}
+
+function resetAll() {
+  if (confirm('정말 모든 학습 기록을 초기화하시겠어요?')) {
+    memorized = [];
+    completedDays = [];
+    streak = 0;
+    localStorage.clear();
+    currentDay = 1;
+    renderCards();
+    updateStreakBadge();
+    alert('초기화 완료!');
+  }
+}
+
+function changeFontSize(size) {
+  enFontSize = parseInt(size);
+  renderCards();
+}
+
+function updateStreakBadge() {
+  const txt = `🔥 연속 ${streak}일째`;
+  document.getElementById('streakBadge').textContent = txt;
+  document.getElementById('streakHeader').textContent = `🔥 연속 ${streak}일`;
+}
+
+// Init
+renderCards();
+updateStreakBadge();
+</script>
+</body>
+</html>
