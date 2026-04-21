@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>키르기스스탄 여행 영어 v2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0EDE6}
+.app{max-width:390px;margin:0 auto;background:#FAFAF7;min-height:100vh}
+.hdr{background:#3A7BD5;padding:18px 16px 14px;color:#fff}
+.hdr h1{font-size:17px;font-weight:600;margin-bottom:2px}
+.hdr p{font-size:11px;opacity:.82}
+.hdr-badges{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.hbadge{background:rgba(255,255,255,.2);border-radius:20px;padding:3px 9px;font-size:10px;color:#fff}
+.nav-wrap{background:#fff;border-bottom:0.5px solid #E0D8D0;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.nav-wrap::-webkit-scrollbar{display:none}
+.nav{display:flex;gap:4px;padding:10px 10px 8px;width:max-content}
+.nb{flex-shrink:0;padding:5px 11px;border-radius:18px;border:0.5px solid #CCC8C0;background:#fff;font-size:11px;cursor:pointer;color:#666;font-family:inherit;transition:all .15s}
+.nb.on{background:#3A7BD5;border-color:#3A7BD5;color:#fff}
+.content{padding:12px}
+.sec{display:none}.sec.on{display:block}
+.sec-label{font-size:10px;font-weight:600;color:#999;letter-spacing:.6px;text-transform:uppercase;margin:6px 0 10px}
+.tip-box{background:#FFF8EC;border-radius:12px;border:0.5px solid #EFC96A;padding:11px 13px;margin-bottom:10px}
+.tip-box h3{font-size:12px;font-weight:600;color:#A07020;margin-bottom:4px}
+.tip-box p{font-size:11px;color:#8A5E10;line-height:1.6}
+.card{background:#fff;border-radius:14px;border:0.5px solid #E4DDD6;padding:13px;margin-bottom:9px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.card .sit{font-size:9px;font-weight:600;color:#3A7BD5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.card .en{font-size:15px;font-weight:600;color:#1A1A1A;margin-bottom:3px;line-height:1.4}
+.card .kr{font-size:12px;color:#888;margin-bottom:8px}
+.card .tip{font-size:10px;color:#A07020;background:#FFF8EC;border-radius:7px;padding:5px 9px;margin-bottom:9px;line-height:1.5}
+.reply-toggle{font-size:11px;color:#3A7BD5;background:#EBF3FD;border:0.5px solid #B5D4F4;border-radius:8px;padding:5px 10px;cursor:pointer;font-family:inherit;margin-bottom:8px;width:100%;text-align:left}
+.reply-box{display:none;background:#F5F8FE;border-radius:10px;border:0.5px solid #C8DCF5;padding:10px;margin-bottom:9px}
+.reply-box.show{display:block}
+.reply-item{margin-bottom:8px;padding-bottom:8px;border-bottom:0.5px solid #DDE8F8}
+.reply-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.reply-en{font-size:13px;font-weight:600;color:#1A3A6A;margin-bottom:2px}
+.reply-kr{font-size:11px;color:#5A7AAA}
+.reply-ctx{font-size:10px;color:#8A9EC0;margin-top:2px}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap}
+.spk-btn{display:flex;align-items:center;gap:5px;background:#EBF3FD;border:0.5px solid #B5D4F4;border-radius:18px;padding:6px 12px;font-size:12px;color:#185FA5;cursor:pointer;font-weight:500;font-family:inherit}
+.spk-btn:active{background:#D0E7FA}
+.spk-sm{font-size:11px;padding:4px 9px}
+.quiz-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.quiz-meta span{font-size:11px;color:#888}
+.qscore{color:#3A7BD5;font-weight:500}
+.pbar-w{background:#E0D8D0;border-radius:8px;height:5px;margin-bottom:12px}
+.pbar{background:#3A7BD5;border-radius:8px;height:5px;transition:width .4s}
+.qcard{background:#fff;border-radius:14px;padding:16px;border:0.5px solid #E4DDD6;margin-bottom:9px}
+.qq{font-size:14px;font-weight:500;color:#1A1A1A;margin-bottom:12px;line-height:1.5}
+.qopts{display:flex;flex-direction:column;gap:7px}
+.qopt{padding:10px 13px;border-radius:9px;border:0.5px solid #D4CCC4;background:#F8F6F3;font-size:12px;cursor:pointer;color:#333;text-align:left;font-family:inherit;transition:all .15s}
+.qopt:active{background:#EBF3FD}
+.qopt.ok{background:#EAF7EE;border-color:#5CB85C;color:#2D7A2D}
+.qopt.ng{background:#FDECEA;border-color:#E24B4A;color:#9A2020}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+  <h1>🇰🇬 해외여행 필수 영어 — 키르기스스탄</h1>
+  <p>강의 여행 + 해외 필수 일상회화 · 예상 답변 포함</p>
+  <div class="hdr-badges">
+    <span class="hbadge">✈ 7월 25일 출발</span>
+    <span class="hbadge">📅 20일</span>
+    <span class="hbadge">💬 예상답변 수록</span>
+  </div>
+</div>
+
+<div class="nav-wrap">
+<div class="nav">
+  <button class="nb on" onclick="show('imm',this)">✈ 입출국</button>
+  <button class="nb" onclick="show('hotel',this)">🏨 숙소</button>
+  <button class="nb" onclick="show('lec',this)">🎓 강의</button>
+  <button class="nb" onclick="show('rest',this)">🍽 식사</button>
+  <button class="nb" onclick="show('trans',this)">🚕 교통</button>
+  <button class="nb" onclick="show('shop',this)">🛍 쇼핑</button>
+  <button class="nb" onclick="show('social',this)">😊 대화</button>
+  <button class="nb" onclick="show('health',this)">💊 건강</button>
+  <button class="nb" onclick="show('emrg',this)">🆘 비상</button>
+  <button class="nb" onclick="show('quiz',this)">📝 퀴즈</button>
+</div>
+</div>
+
+<div class="content">
+  <div class="sec on" id="imm">
+    <div class="sec-label">입국 심사 · 세관 · 출국</div>
+    <div class="tip-box"><h3>💡 키르기스스탄 입국</h3><p>한국 여권 소지자 30일 무비자. 심사대에서 방문 목적·체류 기간·숙소를 준비하세요.</p></div>
+    <div id="imm-list"></div>
+  </div>
+  <div class="sec" id="hotel">
+    <div class="sec-label">체크인 · 객실 · 체크아웃</div>
+    <div id="hotel-list"></div>
+  </div>
+  <div class="sec" id="lec">
+    <div class="sec-label">강의 · 통역 · 행사</div>
+    <div class="tip-box"><h3>💡 강의 현장</h3><p>통역사에게 핵심 용어를 사전에 공유하고, 문장 단위로 끊어 말하면 통역 품질이 높아집니다.</p></div>
+    <div id="lec-list"></div>
+  </div>
+  <div class="sec" id="rest">
+    <div class="sec-label">식당 · 주문 · 계산</div>
+    <div id="rest-list"></div>
+  </div>
+  <div class="sec" id="trans">
+    <div class="sec-label">택시 · 버스 · 길 찾기</div>
+    <div id="trans-list"></div>
+  </div>
+  <div class="sec" id="shop">
+    <div class="sec-label">쇼핑 · 흥정 · 환불</div>
+    <div id="shop-list"></div>
+  </div>
+  <div class="sec" id="social">
+    <div class="sec-label">인사 · 자기소개 · 감정 · 날씨</div>
+    <div id="social-list"></div>
+  </div>
+  <div class="sec" id="health">
+    <div class="sec-label">약국 · 증상 · 병원</div>
+    <div class="tip-box"><h3>💡 건강 비상시</h3><p>비슈케크 앰뷸런스 103 · 여행자보험 카드를 항상 소지하세요.</p></div>
+    <div id="health-list"></div>
+  </div>
+  <div class="sec" id="emrg">
+    <div class="sec-label">분실 · 도난 · 긴급연락</div>
+    <div class="tip-box"><h3>🚨 비상 연락처</h3><p>경찰 102 | 앰뷸런스 103 | 소방 101<br>한국 대사관(비슈케크) +996 312 579 771</p></div>
+    <div id="emrg-list"></div>
+  </div>
+  <div class="sec" id="quiz">
+    <div class="sec-label">학습 퀴즈</div>
+    <div class="quiz-meta">
+      <span id="qprog">1 / 10</span>
+      <span class="qscore" id="qsc">점수: 0</span>
+    </div>
+    <div class="pbar-w"><div class="pbar" id="pbar" style="width:10%"></div></div>
+    <div id="quiz-wrap"></div>
+  </div>
+</div>
+</div>
+
+<script>
+const D = {
+imm:[
+  {sit:"입국 심사",en:"I'm here for a lecture program.",kr:"강의 프로그램 참가차 왔습니다.",tip:"'business' 보다 'educational / lecture program'이 자연스럽습니다.",replies:[
+    {en:"How long will you stay?",kr:"얼마나 체류하실 건가요?",ctx:"체류 기간 질문"},
+    {en:"Do you have an invitation letter?",kr:"초청장이 있으신가요?",ctx:"서류 확인"},
+    {en:"Welcome. Please proceed.",kr:"환영합니다. 통과하세요.",ctx:"입국 허가"}
+  ]},
+  {sit:"입국 심사",en:"I'll be staying for 20 days.",kr:"20일간 체류할 예정입니다.",tip:"숫자는 손가락으로 함께 표시하면 확실합니다.",replies:[
+    {en:"Where will you be staying?",kr:"어디서 머무실 건가요?",ctx:"숙소 질문"},
+    {en:"That's fine. Enjoy your stay.",kr:"괜찮습니다. 즐거운 여행 되세요.",ctx:"승인"}
+  ]},
+  {sit:"세관",en:"I have nothing to declare.",kr:"신고할 것이 없습니다.",tip:"교재·노트북은 'educational materials'라고 설명하세요.",replies:[
+    {en:"Please open your bag.",kr:"가방을 열어주세요.",ctx:"추가 검사"},
+    {en:"You're free to go.",kr:"가셔도 됩니다.",ctx:"통과"}
+  ]},
+  {sit:"세관",en:"These are teaching materials for my lecture.",kr:"강의용 교재들입니다.",tip:"직접 보여주며 말하면 의사소통이 원활합니다.",replies:[
+    {en:"Are these for personal use?",kr:"개인 사용 목적인가요?",ctx:"용도 확인"},
+    {en:"Okay, that's fine.",kr:"알겠습니다. 괜찮습니다.",ctx:"통과"}
+  ]},
+  {sit:"공항",en:"Where can I collect my luggage?",kr:"수하물은 어디서 찾나요?",tip:"수하물 태그를 미리 준비해 두세요.",replies:[
+    {en:"Baggage claim is on the ground floor.",kr:"수하물 찾는 곳은 1층입니다.",ctx:"위치 안내"},
+    {en:"Follow the signs to carousel 3.",kr:"3번 컨베이어 벨트 표지판을 따라가세요.",ctx:"안내"}
+  ]},
+  {sit:"출국",en:"I'd like to check in for my flight to Seoul.",kr:"서울행 항공편 체크인하고 싶습니다.",tip:"여권·항공권을 미리 꺼내두세요.",replies:[
+    {en:"May I see your passport and ticket?",kr:"여권과 티켓을 보여주세요.",ctx:"서류 확인"},
+    {en:"Window or aisle seat?",kr:"창가 또는 복도 좌석 중 어느 것으로 드릴까요?",ctx:"좌석 선택"},
+    {en:"Your boarding gate is B12.",kr:"탑승 게이트는 B12입니다.",ctx:"게이트 안내"}
+  ]},
+],
+hotel:[
+  {sit:"체크인",en:"I have a reservation under the name Kim.",kr:"김 이름으로 예약했습니다.",tip:"외국에서는 성(last name)을 먼저 말하는 게 일반적입니다.",replies:[
+    {en:"Let me pull up your reservation.",kr:"예약을 확인해 보겠습니다.",ctx:"확인 중"},
+    {en:"Could I see your passport, please?",kr:"여권을 보여주실 수 있나요?",ctx:"신분 확인"},
+    {en:"Your room is ready. Here's your key card.",kr:"방이 준비됐습니다. 키카드 여기 있습니다.",ctx:"체크인 완료"}
+  ]},
+  {sit:"체크인",en:"Could I have a quiet room, please?",kr:"조용한 방으로 부탁드립니다.",tip:"강의 전날 숙면을 위해 꼭 요청하세요.",replies:[
+    {en:"We'll put you on a higher floor.",kr:"높은 층으로 배정해 드리겠습니다.",ctx:"배려 응대"},
+    {en:"I'm sorry, we only have rooms near the elevator.",kr:"죄송합니다. 엘리베이터 근처 방밖에 없습니다.",ctx:"안내"}
+  ]},
+  {sit:"서비스",en:"The Wi-Fi isn't working in my room.",kr:"제 방에서 와이파이가 안 됩니다.",tip:"강의 자료 전송 등에 꼭 필요합니다.",replies:[
+    {en:"I'll send someone to fix it right away.",kr:"바로 직원을 보내드리겠습니다.",ctx:"신속 처리"},
+    {en:"Please try this new password.",kr:"이 새 비밀번호를 시도해 보세요.",ctx:"비밀번호 제공"}
+  ]},
+  {sit:"서비스",en:"Could I get some extra towels and a blanket?",kr:"수건과 담요를 추가로 받을 수 있나요?",tip:"'pillows', 'hangers' 등으로 바꿔 쓸 수 있습니다.",replies:[
+    {en:"Of course. I'll bring them up shortly.",kr:"물론입니다. 곧 가져다 드리겠습니다.",ctx:"수락"},
+    {en:"We'll have them delivered within 10 minutes.",kr:"10분 내로 배달해 드리겠습니다.",ctx:"시간 안내"}
+  ]},
+  {sit:"체크아웃",en:"I'd like to check out. Can I keep my luggage here until 6 PM?",kr:"체크아웃 하는데 오후 6시까지 짐을 맡길 수 있나요?",tip:"마지막 강의 후 공항 이동 전에 유용합니다.",replies:[
+    {en:"No problem. We'll tag your bags.",kr:"문제없습니다. 짐에 태그를 달아드리겠습니다.",ctx:"수락"},
+    {en:"Here's your luggage receipt.",kr:"짐 보관 영수증입니다.",ctx:"영수증 발급"}
+  ]},
+],
+lec:[
+  {sit:"통역사",en:"Please pause after each sentence so the interpreter can translate.",kr:"통역할 수 있도록 문장마다 잠깐 멈추겠습니다.",tip:"사전에 통역사와 속도·신호를 맞추면 더 좋습니다.",replies:[
+    {en:"Understood. I'll signal when you can continue.",kr:"알겠습니다. 계속해도 될 때 신호드릴게요.",ctx:"통역사 응답"},
+    {en:"Please speak a little slower if possible.",kr:"가능하면 조금 더 천천히 말씀해 주세요.",ctx:"속도 요청"}
+  ]},
+  {sit:"강의 중",en:"Does everyone understand so far? Please feel free to ask.",kr:"지금까지 이해하셨나요? 편하게 질문하세요.",tip:"청중과의 소통을 위해 자주 활용하세요.",replies:[
+    {en:"Yes, everything is clear. Thank you.",kr:"네, 모두 명확합니다. 감사합니다.",ctx:"이해 확인"},
+    {en:"Could you explain that part again?",kr:"그 부분을 다시 설명해 주시겠어요?",ctx:"재설명 요청"}
+  ]},
+  {sit:"강의 중",en:"Let me give you a practical example of that.",kr:"실용적인 예를 들어 설명하겠습니다.",tip:"추상적 개념은 예시로 보완하면 이해도가 높아집니다.",replies:[
+    {en:"That makes it much clearer.",kr:"훨씬 이해하기 쉬워졌습니다.",ctx:"이해 표현"},
+    {en:"Can you share the slides after the lecture?",kr:"강의 후 슬라이드를 공유해 주실 수 있나요?",ctx:"자료 요청"}
+  ]},
+  {sit:"강의 후",en:"Thank you for your warm welcome. I really enjoyed the session.",kr:"따뜻하게 맞아주셔서 감사합니다. 강의가 정말 즐거웠습니다.",tip:"마무리 인사는 짧고 진심 어리게 표현하세요.",replies:[
+    {en:"It was our honor to have you here.",kr:"이렇게 모실 수 있어서 영광이었습니다.",ctx:"감사 인사"},
+    {en:"We hope you'll visit again.",kr:"다시 방문해 주시길 바랍니다.",ctx:"재방문 요청"}
+  ]},
+  {sit:"행사",en:"Is there a microphone and projector ready?",kr:"마이크와 프로젝터가 준비되어 있나요?",tip:"강의 30분 전에 미리 확인하는 습관이 중요합니다.",replies:[
+    {en:"Yes, everything is set up.",kr:"네, 모두 준비되어 있습니다.",ctx:"완료 안내"},
+    {en:"The technician will be there in five minutes.",kr:"기술자가 5분 안에 갈 것입니다.",ctx:"지연 안내"}
+  ]},
+],
+rest:[
+  {sit:"예약·입장",en:"I have a reservation for two at 7 PM.",kr:"오후 7시 2인 예약했습니다.",tip:"예약 이름을 영어로 말해두세요.",replies:[
+    {en:"Right this way, please.",kr:"이쪽으로 오세요.",ctx:"안내"},
+    {en:"Your table will be ready in five minutes.",kr:"5분 후 자리가 준비됩니다.",ctx:"대기 안내"}
+  ]},
+  {sit:"주문",en:"Could I see the menu, please?",kr:"메뉴판을 볼 수 있을까요?",tip:"'Do you have an English menu?'로 영문 메뉴도 요청하세요.",replies:[
+    {en:"Here you go. Our special today is lamb kebab.",kr:"여기 있습니다. 오늘의 특선은 양고기 케밥입니다.",ctx:"메뉴 안내"},
+    {en:"I'll give you a moment to decide.",kr:"결정하실 시간을 드리겠습니다.",ctx:"대기"}
+  ]},
+  {sit:"주문",en:"I'll have this, please. And a glass of water.",kr:"이것으로 주세요. 그리고 물 한 잔요.",tip:"메뉴를 손가락으로 가리키면 더 확실합니다.",replies:[
+    {en:"Excellent choice. It will be ready in about 15 minutes.",kr:"좋은 선택입니다. 약 15분 후 나옵니다.",ctx:"주문 완료"},
+    {en:"Sparkling or still water?",kr:"탄산수인가요, 일반 물인가요?",ctx:"물 종류 확인"}
+  ]},
+  {sit:"주문",en:"I'm allergic to nuts. Does this contain any?",kr:"견과류 알레르기가 있습니다. 들어있나요?",tip:"알레르기는 반드시 미리 확인하세요.",replies:[
+    {en:"Let me check with the kitchen.",kr:"주방에 확인해 보겠습니다.",ctx:"확인"},
+    {en:"This dish is nut-free.",kr:"이 요리에는 견과류가 없습니다.",ctx:"안전 확인"}
+  ]},
+  {sit:"계산",en:"Could I have the bill, please?",kr:"계산서 주세요.",tip:"'Is service charge included?'로 봉사료 포함 여부도 확인하세요.",replies:[
+    {en:"Of course. Cash or card?",kr:"물론입니다. 현금인가요, 카드인가요?",ctx:"결제 방법"},
+    {en:"Here's your receipt.",kr:"영수증 여기 있습니다.",ctx:"영수증"}
+  ]},
+],
+trans:[
+  {sit:"택시",en:"Could you take me to this address, please?",kr:"이 주소로 데려다 주시겠어요?",tip:"주소를 화면으로 보여주면 확실합니다.",replies:[
+    {en:"Sure. It will take about 20 minutes.",kr:"네. 약 20분 걸립니다.",ctx:"시간 안내"},
+    {en:"The fare will be around 300 som.",kr:"요금은 약 300솜입니다.",ctx:"요금 안내"}
+  ]},
+  {sit:"택시",en:"How much is the fare to the city center?",kr:"시내까지 요금이 얼마인가요?",tip:"미터기 사용 여부를 먼저 확인하세요.",replies:[
+    {en:"It's a flat rate of 200 som.",kr:"200솜 고정 요금입니다.",ctx:"요금 제시"},
+    {en:"It depends on traffic.",kr:"교통 상황에 따라 다릅니다.",ctx:"변동 안내"}
+  ]},
+  {sit:"길 찾기",en:"Excuse me, how do I get to the central market?",kr:"실례합니다, 중앙 시장은 어떻게 가나요?",tip:"지도 앱을 함께 보여주면 소통이 쉬워집니다.",replies:[
+    {en:"Go straight and turn left at the traffic light.",kr:"직진 후 신호등에서 좌회전하세요.",ctx:"길 안내"},
+    {en:"It's about a 10-minute walk from here.",kr:"여기서 걸어서 약 10분입니다.",ctx:"도보 안내"}
+  ]},
+  {sit:"버스",en:"Does this bus go to the main square?",kr:"이 버스가 중앙 광장으로 가나요?",tip:"노선 번호를 미리 확인해 두세요.",replies:[
+    {en:"Yes, get off at the fourth stop.",kr:"네, 네 번째 정류장에서 내리세요.",ctx:"승차 안내"},
+    {en:"No, you need the number 7 bus.",kr:"아니요, 7번 버스를 타셔야 합니다.",ctx:"노선 안내"}
+  ]},
+],
+shop:[
+  {sit:"쇼핑",en:"How much is this?",kr:"이것은 얼마인가요?",tip:"가격표가 없을 때 꼭 물어보세요.",replies:[
+    {en:"It's 500 som.",kr:"500솜입니다.",ctx:"가격 안내"},
+    {en:"Which one are you referring to?",kr:"어떤 것을 말씀하시는 건가요?",ctx:"확인"}
+  ]},
+  {sit:"흥정",en:"Can you give me a discount?",kr:"할인해 주실 수 있나요?",tip:"재래시장에서는 흥정이 일반적입니다.",replies:[
+    {en:"I can do 10% off for you.",kr:"10% 할인해 드릴 수 있습니다.",ctx:"할인 제공"},
+    {en:"Sorry, this is already our best price.",kr:"죄송합니다, 이미 최저가입니다.",ctx:"거절"}
+  ]},
+  {sit:"쇼핑",en:"Do you have this in a larger size?",kr:"더 큰 사이즈가 있나요?",tip:"'smaller', 'different color'로 바꿔 쓸 수 있습니다.",replies:[
+    {en:"Let me check in the back.",kr:"창고를 확인해 보겠습니다.",ctx:"확인"},
+    {en:"I'm sorry, this is the last one.",kr:"죄송합니다, 이게 마지막입니다.",ctx:"재고 없음"}
+  ]},
+  {sit:"결제",en:"Do you accept credit cards?",kr:"신용카드 받으시나요?",tip:"현지 시장은 현금만 받는 경우가 많습니다.",replies:[
+    {en:"Yes, Visa and Mastercard.",kr:"네, 비자와 마스터카드 됩니다.",ctx:"카드 가능"},
+    {en:"Cash only, I'm afraid.",kr:"죄송합니다, 현금만 됩니다.",ctx:"현금만"}
+  ]},
+  {sit:"반품",en:"I'd like to return this. It's defective.",kr:"이것을 반품하고 싶습니다. 불량품입니다.",tip:"영수증을 꼭 보관하세요.",replies:[
+    {en:"Do you have the receipt?",kr:"영수증 가지고 계신가요?",ctx:"영수증 확인"},
+    {en:"We'll exchange it or give you a refund.",kr:"교환 또는 환불해 드리겠습니다.",ctx:"처리 안내"}
+  ]},
+],
+social:[
+  {sit:"인사",en:"Hello! How are you?",kr:"안녕하세요! 잘 지내시나요?",tip:"'How's it going?' / 'How are you doing?'도 자주 씁니다.",replies:[
+    {en:"I'm doing great, thanks! And you?",kr:"잘 지내고 있어요, 감사합니다! 당신은요?",ctx:"답인사"},
+    {en:"Not bad. Pretty busy lately.",kr:"나쁘지 않아요. 요즘 꽤 바빠요.",ctx:"일상적 답변"}
+  ]},
+  {sit:"자기소개",en:"I'm a professor from Korea. Nice to meet you.",kr:"저는 한국에서 온 교수입니다. 반갑습니다.",tip:"명함을 두 손으로 건네는 한국식 예절이 인상 좋습니다.",replies:[
+    {en:"Nice to meet you too! What subject do you teach?",kr:"저도 반갑습니다! 어떤 과목을 가르치세요?",ctx:"관심 표현"},
+    {en:"Welcome to Kyrgyzstan!",kr:"키르기스스탄에 오신 걸 환영합니다!",ctx:"환영"}
+  ]},
+  {sit:"날씨",en:"The weather here is beautiful today!",kr:"오늘 여기 날씨가 정말 좋네요!",tip:"날씨는 어디서나 자연스러운 대화 시작점입니다.",replies:[
+    {en:"Yes, summers here are lovely but it can get quite hot.",kr:"네, 여름이 아름답지만 꽤 더울 수 있어요.",ctx:"날씨 설명"},
+    {en:"Wait until you see the mountains!",kr:"산을 보시면 더 놀라실 거예요!",ctx:"추천"}
+  ]},
+  {sit:"감정",en:"That's really interesting! Tell me more.",kr:"정말 흥미롭네요! 더 말씀해 주세요.",tip:"관심을 표현하면 대화가 풍부해집니다.",replies:[
+    {en:"I'm glad you find it interesting.",kr:"흥미롭게 생각해 주셔서 기뻐요.",ctx:"기쁨 표현"},
+    {en:"Sure! So basically...",kr:"물론이죠! 그러니까 기본적으로...",ctx:"설명 계속"}
+  ]},
+  {sit:"감사",en:"Thank you so much for your help. I really appreciate it.",kr:"도움 주셔서 정말 감사합니다.",tip:"'I really appreciate it'은 깊은 감사를 표현합니다.",replies:[
+    {en:"It was my pleasure!",kr:"천만에요! 제가 기뻤습니다.",ctx:"겸손한 답변"},
+    {en:"Anytime. Don't hesitate to ask.",kr:"언제든지요. 망설이지 말고 물어보세요.",ctx:"친절한 답변"}
+  ]},
+  {sit:"작별",en:"It was so nice meeting you. Take care!",kr:"만나서 정말 좋았습니다. 잘 지내세요!",tip:"'Keep in touch!'로 연락을 유지하자는 표현도 좋습니다.",replies:[
+    {en:"You too! Safe travels!",kr:"당신도요! 여행 잘 하세요!",ctx:"작별 인사"},
+    {en:"I hope we meet again someday.",kr:"언젠가 다시 만나길 바랍니다.",ctx:"재회 소원"}
+  ]},
+],
+health:[
+  {sit:"증상",en:"I don't feel well. I have a fever and a headache.",kr:"몸이 좋지 않아요. 열이 나고 두통이 있어요.",tip:"증상을 구체적으로 말할수록 빠른 도움을 받습니다.",replies:[
+    {en:"Let me check your temperature.",kr:"체온을 확인해 볼게요.",ctx:"체온 측정"},
+    {en:"I'll call a doctor.",kr:"의사를 부르겠습니다.",ctx:"의사 호출"}
+  ]},
+  {sit:"약국",en:"Do you have something for a stomachache?",kr:"위통에 듣는 약이 있나요?",tip:"'diarrhea', 'cold', 'sore throat'으로 바꿔 쓸 수 있습니다.",replies:[
+    {en:"Yes, take this after meals twice a day.",kr:"네, 이것을 하루 두 번 식후에 드세요.",ctx:"복약 지도"},
+    {en:"Do you have any allergies to medication?",kr:"약 알레르기가 있으신가요?",ctx:"알레르기 확인"}
+  ]},
+  {sit:"병원",en:"I need to see a doctor as soon as possible.",kr:"가능한 빨리 의사를 만나야 합니다.",tip:"여행자보험 카드와 여권을 함께 제시하세요.",replies:[
+    {en:"Please fill out this form first.",kr:"먼저 이 양식을 작성해 주세요.",ctx:"접수 안내"},
+    {en:"The doctor will see you shortly.",kr:"곧 의사가 봐드릴 것입니다.",ctx:"대기 안내"}
+  ]},
+  {sit:"병원",en:"I have travel insurance. Do you accept it?",kr:"여행자보험이 있습니다. 받으시나요?",tip:"보험 카드와 긴급 연락처를 항상 지갑에 넣어두세요.",replies:[
+    {en:"Yes, we work with most international insurers.",kr:"네, 대부분의 국제 보험사와 협력하고 있습니다.",ctx:"보험 가능"},
+    {en:"Please provide your insurance card.",kr:"보험 카드를 제시해 주세요.",ctx:"카드 요청"}
+  ]},
+],
+emrg:[
+  {sit:"긴급",en:"Please call an ambulance immediately!",kr:"즉시 구급차를 불러주세요!",tip:"'Emergency!'만 외쳐도 주의를 끌 수 있습니다.",replies:[
+    {en:"I'm calling right now. Stay calm.",kr:"지금 바로 전화합니다. 진정하세요.",ctx:"즉각 대응"},
+    {en:"Help is on the way.",kr:"도움이 오고 있습니다.",ctx:"안심"}
+  ]},
+  {sit:"분실",en:"My passport has been stolen. I need help.",kr:"여권을 도난당했습니다. 도움이 필요합니다.",tip:"경찰 신고 후 한국 대사관에 즉시 연락하세요.",replies:[
+    {en:"Please come to the police station with me.",kr:"저와 함께 경찰서로 가주세요.",ctx:"경찰 안내"},
+    {en:"I'll need you to fill out a report.",kr:"신고서를 작성하셔야 합니다.",ctx:"서류 안내"}
+  ]},
+  {sit:"소통",en:"I'm sorry, could you speak more slowly, please?",kr:"죄송한데, 좀 더 천천히 말씀해 주시겠어요?",tip:"이 한 문장으로 많은 상황을 해결할 수 있습니다.",replies:[
+    {en:"Of course, I'm sorry.",kr:"물론이죠, 죄송합니다.",ctx:"배려 응대"},
+    {en:"Let me write it down for you.",kr:"적어 드리겠습니다.",ctx:"필기 제공"}
+  ]},
+  {sit:"도움 요청",en:"Could you help me? I'm lost.",kr:"도와주시겠어요? 길을 잃었습니다.",tip:"스마트폰 지도를 보여주며 말하면 더 효과적입니다.",replies:[
+    {en:"Of course! Where are you trying to go?",kr:"물론이죠! 어디를 찾으세요?",ctx:"친절 응대"},
+    {en:"Follow me, I'll show you the way.",kr:"따라오세요, 길을 안내해 드리겠습니다.",ctx:"직접 안내"}
+  ]},
+]
+};
+
+const quizzes=[
+  {q:"입국 심사에서 '강의 프로그램 참가차 왔습니다'는?",opts:["I'm here for a lecture program.","I come for working purpose.","I'm here for vacation.","I'm on business."],ans:0},
+  {q:"'20일간 체류할 예정입니다'를 영어로 하면?",opts:["I'll be staying for 20 days.","I stay twenty days.","I'm here 20 days.","I will stay twenty day."],ans:0},
+  {q:"식당에서 '계산서 주세요'는?",opts:["Give me the money.","I want to pay now.","Could I have the bill, please?","Check please now."],ans:2},
+  {q:"'견과류 알레르기가 있습니다'를 어떻게 말하나요?",opts:["I hate nuts.","I'm allergic to nuts.","No nuts for me please.","Nuts are bad."],ans:1},
+  {q:"택시에서 '이 주소로 가주세요'는?",opts:["Go to here.","Take me this place.","Could you take me to this address?","Drive this address."],ans:2},
+  {q:"'와이파이가 안 됩니다'를 호텔에서 말할 때?",opts:["Internet broken.","The Wi-Fi isn't working in my room.","No internet here.","Wi-Fi problem please."],ans:1},
+  {q:"'도움 주셔서 정말 감사합니다'의 자연스러운 표현은?",opts:["Thank you so much for your help. I really appreciate it.","Thanks a lot help.","I appreciate you help.","Very thank you."],ans:0},
+  {q:"약국에서 '위통에 듣는 약이 있나요?'는?",opts:["Medicine for stomach?","Do you have something for a stomachache?","I need stomach medicine.","Stomach hurts, what?"],ans:1},
+  {q:"'이것을 반품하고 싶습니다. 불량품입니다'는?",opts:["This is broken, I want money back.","I'd like to return this. It's defective.","Return this please, bad.","Give me refund, broken."],ans:1},
+  {q:"'조금 더 천천히 말씀해 주시겠어요?'는?",opts:["Speak slow please.","Talk slowly.","Could you speak more slowly, please?","More slow your talk."],ans:2},
+];
+
+let qi=0,sc=0,ans=false;
+
+function renderCards(listId,items){
+  const el=document.getElementById(listId);
+  if(!el)return;
+  el.innerHTML=items.map((item,i)=>{
+    const rid=listId+'-r'+i;
+    const replyHtml=item.replies?`
+      <button class="reply-toggle" onclick="toggleReply('${rid}')">💬 예상 답변 보기 ▾</button>
+      <div class="reply-box" id="${rid}">
+        ${item.replies.map(r=>`
+          <div class="reply-item">
+            <div class="reply-en">${r.en}</div>
+            <div class="reply-kr">${r.kr}</div>
+            <div class="reply-ctx">📌 ${r.ctx}</div>
+            <button class="spk-btn spk-sm" style="margin-top:5px" onclick="sp('${r.en.replace(/'/g,"\\'")}')">🔊 발음</button>
+          </div>
+        `).join('')}
+      </div>
+    `:'';
+    return `<div class="card">
+      <div class="sit">${item.sit}</div>
+      <div class="en">${item.en}</div>
+      <div class="kr">${item.kr}</div>
+      ${item.tip?`<div class="tip">💡 ${item.tip}</div>`:''}
+      <div class="btn-row">
+        <button class="spk-btn" onclick="sp('${item.en.replace(/'/g,"\\'")}')">🔊 발음 듣기</button>
+      </div>
+      ${replyHtml}
+    </div>`;
+  }).join('');
+}
+
+function toggleReply(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('show');
+  const btn=el.previousElementSibling;
+  btn.textContent=el.classList.contains('show')?'💬 예상 답변 닫기 ▴':'💬 예상 답변 보기 ▾';
+}
+
+function renderQuiz(){
+  if(qi>=quizzes.length){
+    document.getElementById('quiz-wrap').innerHTML=`
+      <div class="qcard" style="text-align:center">
+        <div style="font-size:36px;margin-bottom:10px">🎉</div>
+        <div style="font-size:17px;font-weight:600;color:#1A1A1A;margin-bottom:6px">${sc} / ${quizzes.length} 정답!</div>
+        <div style="font-size:12px;color:#888;margin-bottom:14px">${sc>=8?'완벽합니다! 여행 준비 완료!':sc>=5?'좋습니다! 조금만 더 연습해요.':'더 연습이 필요합니다!'}</div>
+        <button class="spk-btn" style="margin:0 auto" onclick="resetQ()">↺ 다시 풀기</button>
+      </div>`;
+    return;
+  }
+  ans=false;
+  const q=quizzes[qi];
+  document.getElementById('qprog').textContent=`${qi+1} / ${quizzes.length}`;
+  document.getElementById('qsc').textContent=`점수: ${sc}`;
+  document.getElementById('pbar').style.width=((qi+1)/quizzes.length*100)+'%';
+  document.getElementById('quiz-wrap').innerHTML=`
+    <div class="qcard">
+      <div class="qq">${q.q}</div>
+      <div class="qopts">${q.opts.map((o,i)=>`<button class="qopt" id="o${i}" onclick="checkQ(${i})">${o}</button>`).join('')}</div>
+    </div>`;
+}
+
+function checkQ(idx){
+  if(ans)return;
+  ans=true;
+  const q=quizzes[qi];
+  const ok=q.ans===idx;
+  document.getElementById('o'+idx).classList.add(ok?'ok':'ng');
+  if(!ok)document.getElementById('o'+q.ans).classList.add('ok');
+  if(ok)sc++;
+  sp(q.opts[q.ans]);
+  setTimeout(()=>{qi++;renderQuiz();},1800);
+}
+
+function resetQ(){qi=0;sc=0;renderQuiz();}
+
+function sp(txt){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang='en-US';u.rate=0.82;u.pitch=1;
+  speechSynthesis.speak(u);
+}
+
+function show(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+  if(id==='quiz')renderQuiz();
+}
+
+renderCards('imm-list',D.imm);
+renderCards('hotel-list',D.hotel);
+renderCards('lec-list',D.lec);
+renderCards('rest-list',D.rest);
+renderCards('trans-list',D.trans);
+renderCards('shop-list',D.shop);
+renderCards('social-list',D.social);
+renderCards('health-list',D.health);
+renderCards('emrg-list',D.emrg);
+</script>
+</body>
+</html>
