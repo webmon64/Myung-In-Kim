@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전자책 출판 도구 — 단어 수 확인 & 교정 비용 계산기</title>
+<meta name="description" content="영문 단어 수 확인, 교정 비용 계산, Fiverr/Upwork 요청 문장 생성 — 아마존 KDP 전자책 출판 준비 통합 도구">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #0E0E11;
+  --bg2:   #17171C;
+  --bg3:   #1F1F27;
+  --line:  rgba(255,255,255,0.07);
+  --line2: rgba(255,255,255,0.12);
+  --text:  #EEEAE2;
+  --muted: #7A7670;
+  --dim:   #4A4845;
+  --gold:  #C9A96E;
+  --gold2: #F0D4A0;
+  --teal:  #4ECDC4;
+  --red:   #E05A4E;
+  --green: #52C487;
+  --card:  #17171C;
+  --r:     10px;
+  --r2:    16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem;
+  height: 56px;
+  background: rgba(14,14,17,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  color: var(--gold);
+  letter-spacing: 0.03em;
+}
+.nav-tabs { display: flex; gap: 4px; }
+.nav-tab {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-tab:hover { color: var(--text); background: var(--bg3); }
+.nav-tab.active { color: var(--gold); background: rgba(201,169,110,0.1); }
+
+/* ── HERO ── */
+.hero {
+  padding: 4rem 2rem 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(201,169,110,0.3);
+  border-radius: 100px;
+  padding: 4px 14px;
+  margin-bottom: 1.25rem;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+.hero h1 em { font-style: italic; color: var(--gold2); }
+.hero p {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 2rem;
+}
+.hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  padding: 10px 24px;
+  background: var(--gold);
+  color: #0E0E11;
+  border: none;
+  border-radius: var(--r);
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+.btn-secondary {
+  padding: 10px 24px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line2);
+  border-radius: var(--r);
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── PAGES ── */
+.page { display: none; max-width: 900px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+.page.active { display: block; }
+
+/* ── SECTION TITLE ── */
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+.sec-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+.card-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg3);
+}
+.card-head-title { font-size: 13px; font-weight: 500; color: var(--muted); }
+.card-body { padding: 1.5rem 1.5rem; }
+
+/* ── STATS ROW ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+.stat-box {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.stat-box.hl { border-color: rgba(201,169,110,0.3); }
+.stat-lbl { font-size: 10px; color: var(--muted); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--text); line-height: 1; }
+.stat-box.hl .stat-num { color: var(--gold); }
+.stat-sub { font-size: 11px; color: var(--dim); margin-top: 4px; }
+
+/* ── TEXTAREA ── */
+.toolbar {
+  padding: 10px 16px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+}
+.toolbar-btns { display: flex; gap: 6px; }
+.tb {
+  padding: 5px 13px;
+  border-radius: 6px;
+  border: 1px solid var(--line2);
+  background: transparent;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tb:hover { color: var(--text); border-color: var(--line2); }
+.tb.red:hover { color: var(--red); border-color: var(--red); }
+.toolbar-info { font-size: 12px; color: var(--dim); }
+.toolbar-info span { color: var(--text); font-weight: 500; }
+
+textarea {
+  width: 100%;
+  min-height: 220px;
+  padding: 1.25rem 1.5rem;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background: var(--card);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+}
+textarea::placeholder { color: var(--dim); }
+
+/* ── DETAIL GRID ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.25rem; }
+
+.detail-rows { padding: 4px 0; }
+.d-row {
+  display: flex; justify-content: space-between;
+  padding: 9px 20px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--line);
+}
+.d-row:last-child { border-bottom: none; }
+.d-key { color: var(--muted); }
+.d-val { font-weight: 600; color: var(--text); }
+.d-val.gold { color: var(--gold); }
+.d-val.green { color: var(--green); }
+
+/* ── PROGRESS ── */
+.prog-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r2); padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+.prog-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+.prog-num { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); }
+.target-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+.tpill {
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--line2);
+  background: transparent;
+  font-size: 11px; font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tpill:hover { color: var(--text); }
+.tpill.active { background: var(--gold); color: #0E0E11; border-color: var(--gold); font-weight: 600; }
+.track { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+.fill { height: 100%; border-radius: 3px; background: var(--teal); transition: width 0.5s ease; }
+.fill.warn { background: #E8A838; }
+.fill.done { background: var(--gold); }
+.prog-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--dim); }
+.prog-pct { font-weight: 600; color: var(--text); }
+
+/* ── KEYWORDS ── */
+.kw-row { display: flex; align-items: center; gap: 10px; padding: 8px 20px; border-bottom: 1px solid var(--line); }
+.kw-row:last-child { border-bottom: none; }
+.kw-n { font-size: 11px; color: var(--dim); min-width: 16px; }
+.kw-w { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
+.kw-bar-bg { width: 100px; height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
+.kw-bar-fg { height: 100%; background: var(--gold); border-radius: 2px; }
+.kw-c { font-size: 12px; color: var(--dim); min-width: 36px; text-align: right; }
+.kw-empty { padding: 1.5rem; text-align: center; font-size: 13px; color: var(--dim); }
+
+/* ── CALCULATOR ── */
+.slider-row { margin-bottom: 1.75rem; }
+.slider-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.75rem; }
+.slider-lbl { font-size: 13px; color: var(--muted); font-weight: 500; }
+.slider-disp { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--gold); }
+.slider-disp span { font-family: 'Outfit', sans-serif; font-size: 13px; color: var(--dim); }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; height: 4px;
+  background: var(--bg3);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--gold);
+  transition: transform 0.15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.slider-ticks { display: flex; justify-content: space-between; font-size: 10px; color: var(--dim); }
+
+.tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1.75rem; }
+.tier-btn {
+  padding: 12px 8px;
+  border: 1px solid var(--line2);
+  border-radius: var(--r);
+  background: transparent;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+}
+.tier-btn:hover { border-color: var(--gold); }
+.tier-btn.active { border-color: var(--gold); background: rgba(201,169,110,0.08); }
+.tier-btn-name { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.tier-btn-price { font-size: 15px; font-weight: 600; color: var(--text); }
+.tier-btn.active .tier-btn-price { color: var(--gold); }
+.tier-btn-desc { font-size: 10px; color: var(--dim); margin-top: 2px; }
+
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+.res-box {
+  border-radius: var(--r);
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+}
+.res-box.fiverr { border-color: rgba(29,191,115,0.2); background: rgba(29,191,115,0.04); }
+.res-box.upwork { border-color: rgba(111,218,68,0.2); background: rgba(111,218,68,0.04); }
+.res-box.total { grid-column: 1/-1; background: var(--bg3); border-color: rgba(201,169,110,0.2); }
+.res-platform { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+.res-box.fiverr .res-platform { color: var(--green); }
+.res-box.upwork .res-platform { color: #8ED862; }
+.res-box.total .res-platform { color: var(--muted); }
+.res-price { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.res-sub { font-size: 11px; color: var(--dim); }
+.total-row { display: flex; justify-content: space-between; align-items: center; }
+.total-price { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold); }
+
+.breakdown { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.bd-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); padding: 5px 0; border-bottom: 1px dashed var(--line); }
+.bd-row:last-child { border-bottom: none; color: var(--text); font-weight: 600; }
+.bd-row strong { color: var(--gold); }
+
+.page-hint {
+  background: var(--bg3);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+.page-hint strong { color: var(--gold2); }
+
+/* ── MSG TABS ── */
+.msg-tabs { display: flex; gap: 4px; background: var(--bg3); padding: 4px; border-radius: var(--r); width: fit-content; margin-bottom: 1rem; }
+.msg-tab { padding: 6px 18px; border-radius: 7px; border: none; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; background: transparent; color: var(--muted); transition: all 0.15s; }
+.msg-tab.active { background: var(--bg); color: var(--gold); }
+.msg-panel { display: none; }
+.msg-panel.active { display: block; }
+
+.msg-card { background: var(--bg3); border: 1px solid var(--line); border-radius: var(--r2); overflow: hidden; margin-bottom: 10px; }
+.msg-card-head { padding: 10px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+.msg-card-title { font-size: 12px; font-weight: 500; color: var(--muted); }
+.copy-btn { background: var(--gold); color: #0E0E11; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; font-family: 'Outfit', sans-serif; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.copy-btn:hover { background: var(--gold2); }
+.copy-btn.ok { background: var(--green); color: #0E0E11; }
+.msg-text { padding: 14px 16px; font-size: 13px; line-height: 1.8; color: var(--text); white-space: pre-line; }
+.msg-ko { padding: 10px 16px; border-top: 1px dashed var(--line); font-size: 12px; color: var(--dim); line-height: 1.6; }
+
+/* ── PLATFORM COMPARE ── */
+.plat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.25rem; }
+.plat-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r2); overflow: hidden; }
+.plat-head { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; background: var(--bg3); }
+.plat-dot { width: 10px; height: 10px; border-radius: 50%; }
+.plat-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.plat-type { font-size: 11px; color: var(--dim); margin-left: auto; }
+.plat-rows { padding: 4px 0; }
+.plat-row { display: flex; justify-content: space-between; padding: 8px 16px; font-size: 12px; border-bottom: 1px solid var(--line); }
+.plat-row:last-child { border-bottom: none; }
+.plat-key { color: var(--muted); }
+.plat-val { font-weight: 500; color: var(--text); text-align: right; }
+
+/* ── TIP ── */
+.tip { background: rgba(201,169,110,0.06); border: 1px solid rgba(201,169,110,0.2); border-radius: var(--r2); padding: 1.25rem 1.5rem; display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.25rem; }
+.tip-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.tip-body strong { font-size: 13px; color: var(--gold2); display: block; margin-bottom: 4px; }
+.tip-body p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* ── SITES ── */
+.site-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.site-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r2); padding: 1rem 1.25rem; text-decoration: none; display: block; transition: all 0.15s; }
+.site-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.site-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.site-url { font-size: 11px; color: var(--gold); margin-bottom: 8px; }
+.site-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+.site-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+.tag { font-size: 10px; padding: 2px 8px; border-radius: 100px; border: 1px solid var(--line2); color: var(--dim); }
+
+/* ── FOOTER ── */
+footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--dim); border-top: 1px solid var(--line); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity:0; transform: translateY(14px); } to { opacity:1; transform:translateY(0); } }
+.hero { animation: fadeUp 0.5s ease both; }
+.stats-row { animation: fadeUp 0.4s 0.05s ease both; }
+.card, .prog-card, .two-col, .plat-grid { animation: fadeUp 0.4s 0.1s ease both; }
+
+@media (max-width: 600px) {
+  .stats-row, .two-col, .result-grid, .plat-grid, .site-grid { grid-template-columns: 1fr; }
+  .res-box.total { grid-column: 1; }
+  .tier-grid { grid-template-columns: 1fr; }
+  nav { padding: 0 1rem; }
+  .nav-logo { font-size: 13px; }
+  .hero { padding: 2.5rem 1rem 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">전자책 출판 도구</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('home', this)">홈</button>
+    <button class="nav-tab" onclick="showPage('counter', this)">단어 수 확인</button>
+    <button class="nav-tab" onclick="showPage('calc', this)">비용 계산기</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-badge">Amazon KDP 출판 준비 도구</div>
+    <h1>한글 원고를 영문으로<br><em>아마존에 출간하기</em></h1>
+    <p>영문 단어 수 확인부터 원어민 교정 비용 계산, Fiverr·Upwork 요청 문장까지 한 곳에서 해결하세요.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('counter', document.querySelectorAll('.nav-tab')[1])">단어 수 확인 시작</button>
+      <button class="btn-secondary" onclick="showPage('calc', document.querySelectorAll('.nav-tab')[2])">비용 계산기 보기</button>
+    </div>
+  </div>
+
+  <div style="max-width:900px;margin:0 auto;padding:0 1.5rem 4rem;">
+    <div class="two-col" style="gap:16px;">
+      <div class="card" style="cursor:pointer;" onclick="showPage('counter', document.querySelectorAll('.nav-tab')[1])">
+        <div class="card-body">
+          <div style="font-size:28px;margin-bottom:1rem;">📝</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:8px;color:var(--text);">단어 수 확인기</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.65;">영문 텍스트를 붙여넣으면 단어·문자 수, 읽기 시간, 키워드 빈도, A4 페이지 환산, KDP 목표 진행률을 바로 확인합니다.</div>
+          <div style="margin-top:1rem;font-size:12px;color:var(--gold);">시작하기 →</div>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer;" onclick="showPage('calc', document.querySelectorAll('.nav-tab')[2])">
+        <div class="card-body">
+          <div style="font-size:28px;margin-bottom:1rem;">💰</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:8px;color:var(--text);">교정 비용 계산기</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.65;">단어 수와 등급을 선택하면 Fiverr·Upwork 예상 비용이 자동 계산됩니다. 요청 문장도 한 번에 복사하세요.</div>
+          <div style="margin-top:1rem;font-size:12px;color:var(--gold);">시작하기 →</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-icon">💡</div>
+      <div class="tip-body">
+        <strong>추천 사용 순서</strong>
+        <p>① 단어 수 확인기에서 영문 원고를 붙여넣어 단어 수 파악 → ② 비용 계산기에서 단어 수 입력 후 교정 비용 확인 → ③ 요청 문장 복사해서 Fiverr 또는 Upwork에 바로 전송</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ WORD COUNTER ═══════════════ -->
+<div class="page" id="page-counter">
+  <div style="padding: 2rem 0 1rem;">
+    <div style="max-width:900px;margin:0 auto;padding:0 1.5rem;">
+      <div class="sec-label">Word Count Checker</div>
+      <div class="sec-title">영문 단어 수 확인기</div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box hl">
+      <div class="stat-lbl">단어 수</div>
+      <div class="stat-num" id="wc-words">0</div>
+      <div class="stat-sub">Words</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-lbl">문자 (공백 포함)</div>
+      <div class="stat-num" id="wc-char">0</div>
+      <div class="stat-sub">Characters</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-lbl">문자 (공백 제외)</div>
+      <div class="stat-num" id="wc-char2">0</div>
+      <div class="stat-sub">No spaces</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-lbl">읽기 시간</div>
+      <div class="stat-num" id="wc-read">0분</div>
+      <div class="stat-sub">200단어/분 기준</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="toolbar">
+      <div class="toolbar-btns">
+        <button class="tb" onclick="doPaste()">붙여넣기</button>
+        <button class="tb" onclick="doCopy()">전체 복사</button>
+        <button class="tb red" onclick="doClear()">지우기</button>
+        <button class="tb" onclick="sendToCalc()" style="color:var(--gold);border-color:rgba(201,169,110,0.3);">→ 비용 계산기로</button>
+      </div>
+      <div class="toolbar-info">문장 <span id="wc-sent">0</span>개 · 단락 <span id="wc-para">0</span>개</div>
+    </div>
+    <textarea id="wc-area" placeholder="여기에 영문 텍스트를 붙여넣거나 직접 입력하세요.
+
+예시: The purpose of this ebook is to help graduate students understand the process of planning, designing, and publishing an ebook..."></textarea>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><div class="card-head-title">상세 분석</div></div>
+      <div class="detail-rows">
+        <div class="d-row"><span class="d-key">단어 수</span><span class="d-val gold" id="d-words">0</span></div>
+        <div class="d-row"><span class="d-key">고유 단어 수</span><span class="d-val" id="d-unique">0</span></div>
+        <div class="d-row"><span class="d-key">문장 수</span><span class="d-val" id="d-sent">0</span></div>
+        <div class="d-row"><span class="d-key">단락 수</span><span class="d-val" id="d-para2">0</span></div>
+        <div class="d-row"><span class="d-key">평균 단어/문장</span><span class="d-val" id="d-avg">0</span></div>
+        <div class="d-row"><span class="d-key">A4 페이지 환산</span><span class="d-val" id="d-page">0 페이지</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-head-title">교정 비용 빠른 추정</div></div>
+      <div class="detail-rows">
+        <div class="d-row"><span class="d-key">저가 ($0.01/word)</span><span class="d-val" id="q-low">$0</span></div>
+        <div class="d-row"><span class="d-key">중급 ($0.02/word)</span><span class="d-val gold" id="q-mid">$0</span></div>
+        <div class="d-row"><span class="d-key">전문가 ($0.04/word)</span><span class="d-val" id="q-hi">$0</span></div>
+        <div class="d-row"><span class="d-key">Upwork 시간제 (저)</span><span class="d-val" id="q-up1">$0</span></div>
+        <div class="d-row"><span class="d-key">Upwork 시간제 (중)</span><span class="d-val" id="q-up2">$0</span></div>
+        <div class="d-row"><span class="d-key">수수료 포함 예상</span><span class="d-val green" id="q-tot">$0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KDP Progress -->
+  <div class="prog-card">
+    <div class="prog-top">
+      <div>
+        <div class="sec-label" style="margin-bottom:4px;">KDP 목표 진행률</div>
+        <div class="prog-num"><span id="pg-words">0</span> / <span id="pg-target-lbl">5,000</span> words</div>
+      </div>
+    </div>
+    <div class="target-pills">
+      <button class="tpill active" onclick="setTarget(5000,this)">단편 5,000</button>
+      <button class="tpill" onclick="setTarget(10000,this)">교재 10,000</button>
+      <button class="tpill" onclick="setTarget(20000,this)">중편 20,000</button>
+      <button class="tpill" onclick="setTarget(40000,this)">장편 40,000</button>
+      <button class="tpill" onclick="setTarget(60000,this)">소설 60,000</button>
+    </div>
+    <div class="track"><div class="fill" id="pg-fill" style="width:0%"></div></div>
+    <div class="prog-meta"><span id="pg-msg">텍스트를 입력하면 진행률이 표시됩니다</span><span class="prog-pct" id="pg-pct">0%</span></div>
+  </div>
+
+  <!-- Keywords -->
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="card-head">
+      <div class="card-head-title">상위 키워드 빈도</div>
+      <div style="font-size:11px;color:var(--dim);">불용어(the, a, is…) 제외</div>
+    </div>
+    <div id="kw-list"><div class="kw-empty">텍스트를 입력하면 키워드 분석이 표시됩니다.</div></div>
+  </div>
+
+  <!-- Word sites -->
+  <div class="sec-label" style="margin-bottom:.75rem;">추천 온라인 단어 수 확인 사이트</div>
+  <div class="site-grid" style="margin-bottom:1.5rem;">
+    <a class="site-card" href="https://wordcounter.net" target="_blank">
+      <div class="site-name">WordCounter.net</div>
+      <div class="site-url">wordcounter.net</div>
+      <div class="site-desc">가장 널리 쓰이는 사이트. 문법 교정·자동 저장 기능 포함.</div>
+      <div class="site-tags"><span class="tag">무료</span><span class="tag">문법 교정</span></div>
+    </a>
+    <a class="site-card" href="https://wordcounter.io" target="_blank">
+      <div class="site-name">WordCounter.io</div>
+      <div class="site-url">wordcounter.io</div>
+      <div class="site-desc">단어·문자·페이지 수, 키워드 밀도, 읽기 수준 실시간 분석.</div>
+      <div class="site-tags"><span class="tag">무료</span><span class="tag">키워드 분석</span></div>
+    </a>
+    <a class="site-card" href="https://quillbot.com/word-counter" target="_blank">
+      <div class="site-name">QuillBot Word Counter</div>
+      <div class="site-url">quillbot.com</div>
+      <div class="site-desc">광고 없이 깔끔한 UI. SNS 플랫폼별 글자 제한도 안내.</div>
+      <div class="site-tags"><span class="tag">무료</span><span class="tag">광고 없음</span></div>
+    </a>
+    <a class="site-card" href="https://www.grammarly.com/word-counter" target="_blank">
+      <div class="site-name">Grammarly Word Counter</div>
+      <div class="site-url">grammarly.com</div>
+      <div class="site-desc">단어·문자·문장·단락 수 동시 확인. Grammarly 교정 연동.</div>
+      <div class="site-tags"><span class="tag">무료</span><span class="tag">문법 연동</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════ CALCULATOR ═══════════════ -->
+<div class="page" id="page-calc">
+  <div style="padding: 2rem 0 1rem;">
+    <div style="max-width:900px;margin:0 auto;padding:0 1.5rem;">
+      <div class="sec-label">Proofreading Cost Calculator</div>
+      <div class="sec-title">교정 비용 계산기</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><div class="card-head-title">단어 수 & 등급 선택</div></div>
+    <div class="card-body">
+      <div class="slider-row">
+        <div class="slider-top">
+          <div class="slider-lbl">영문 단어 수</div>
+          <div class="slider-disp" id="sl-disp">10,000 <span>words</span></div>
+        </div>
+        <input type="range" id="sl" min="1000" max="60000" step="1000" value="10000">
+        <div class="slider-ticks"><span>1,000</span><span>15,000</span><span>30,000</span><span>45,000</span><span>60,000</span></div>
+      </div>
+
+      <div class="sec-label" style="margin-bottom:.5rem;">교정 등급</div>
+      <div class="tier-grid">
+        <button class="tier-btn active" data-rate="0.01" onclick="pickTier(this)">
+          <div class="tier-btn-name">저가</div>
+          <div class="tier-btn-price">$0.01/word</div>
+          <div class="tier-btn-desc">신규·리뷰 적음</div>
+        </button>
+        <button class="tier-btn" data-rate="0.02" onclick="pickTier(this)">
+          <div class="tier-btn-name">중급 ★추천</div>
+          <div class="tier-btn-price">$0.02/word</div>
+          <div class="tier-btn-desc">Level 1~2 셀러</div>
+        </button>
+        <button class="tier-btn" data-rate="0.04" onclick="pickTier(this)">
+          <div class="tier-btn-name">전문가</div>
+          <div class="tier-btn-price">$0.04/word</div>
+          <div class="tier-btn-desc">Top Rated / Pro</div>
+        </button>
+      </div>
+
+      <div class="result-grid">
+        <div class="res-box fiverr">
+          <div class="res-platform">Fiverr</div>
+          <div class="res-price" id="r-fiverr">$100</div>
+          <div class="res-sub" id="r-fiverr-sub">교정 기본 비용</div>
+        </div>
+        <div class="res-box upwork">
+          <div class="res-platform">Upwork</div>
+          <div class="res-price" id="r-upwork">$125–175</div>
+          <div class="res-sub" id="r-upwork-sub">시간당 $25 × 5~7시간</div>
+        </div>
+        <div class="res-box total">
+          <div class="total-row">
+            <div>
+              <div class="res-platform">수수료 포함 최종 예상 (Fiverr 기준)</div>
+              <div class="res-sub" id="r-total-sub">5.5% + 소액 수수료 포함</div>
+            </div>
+            <div class="total-price" id="r-total">$109</div>
+          </div>
+          <div class="breakdown">
+            <div class="bd-row"><span>교정 기본 비용</span><strong id="bd1">$100</strong></div>
+            <div class="bd-row"><span>플랫폼 수수료 (5.5%)</span><strong id="bd2">$5.50</strong></div>
+            <div class="bd-row"><span>소액 추가 수수료</span><strong id="bd3">$3.50</strong></div>
+            <div class="bd-row"><span>최종 지불 금액</span><strong id="bd4">$109</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-hint">
+        <strong>A4 페이지 환산:</strong> 영문 A4 1페이지 ≈ 250~300단어 기준 →
+        현재 단어 수 기준 <strong id="page-est">약 33~40페이지</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Platform compare -->
+  <div class="sec-label" style="margin-bottom:.75rem;">플랫폼 비교</div>
+  <div class="plat-grid">
+    <div class="plat-card">
+      <div class="plat-head">
+        <div class="plat-dot" style="background:#1DBF73;"></div>
+        <div class="plat-name">Fiverr</div>
+        <div class="plat-type">패키지형</div>
+      </div>
+      <div class="plat-rows">
+        <div class="plat-row"><span class="plat-key">요금 방식</span><span class="plat-val">고정가 패키지</span></div>
+        <div class="plat-row"><span class="plat-key">수수료 (구매자)</span><span class="plat-val">5.5% + $3.50*</span></div>
+        <div class="plat-row"><span class="plat-key">평균 납기</span><span class="plat-val">6~9일</span></div>
+        <div class="plat-row"><span class="plat-key">빠른 납기</span><span class="plat-val">48시간 옵션</span></div>
+        <div class="plat-row"><span class="plat-key">초보자 추천</span><span class="plat-val">⭐⭐⭐⭐⭐</span></div>
+      </div>
+    </div>
+    <div class="plat-card">
+      <div class="plat-head">
+        <div class="plat-dot" style="background:#6FDA44;"></div>
+        <div class="plat-name">Upwork</div>
+        <div class="plat-type">제안서형</div>
+      </div>
+      <div class="plat-rows">
+        <div class="plat-row"><span class="plat-key">요금 방식</span><span class="plat-val">시간제 / 고정가</span></div>
+        <div class="plat-row"><span class="plat-key">수수료 (구매자)</span><span class="plat-val">3% 또는 $3*</span></div>
+        <div class="plat-row"><span class="plat-key">평균 납기</span><span class="plat-val">5~10일</span></div>
+        <div class="plat-row"><span class="plat-key">전문성 검증</span><span class="plat-val">포트폴리오 확인</span></div>
+        <div class="plat-row"><span class="plat-key">초보자 추천</span><span class="plat-val">⭐⭐⭐</span></div>
+      </div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:var(--dim);margin-bottom:1.5rem;padding-left:4px;">* $100 미만 주문 시 소액 수수료 추가 | 고정가 계약 기준</div>
+
+  <!-- Request messages -->
+  <div class="sec-label" style="margin-bottom:.75rem;">교정 요청 문장</div>
+  <div class="msg-tabs">
+    <button class="msg-tab active" onclick="switchMsg('fiverr', this)">Fiverr</button>
+    <button class="msg-tab" onclick="switchMsg('upwork', this)">Upwork</button>
+  </div>
+
+  <div class="msg-panel active" id="mp-fiverr">
+    <div class="msg-card">
+      <div class="msg-card-head">
+        <div class="msg-card-title">첫 번째 문의 메시지</div>
+        <button class="copy-btn" onclick="copyMsg('cm1',this)">복사</button>
+      </div>
+      <div class="msg-text" id="cm1">Hi,
+
+I have an ebook manuscript translated from Korean to English using AI tools (Claude/DeepL). I need a native English proofreader to check grammar, spelling, punctuation, and natural flow so it reads like it was originally written in English.
+
+The total word count is approximately [WORD COUNT] words. It is an educational ebook for graduate students on the topic of ebook planning, design, and self-publishing.
+
+Could you please let me know:
+1. Your price for this project?
+2. Estimated delivery time?
+3. Do you use Track Changes in Word so I can review edits easily?
+
+Thank you!</div>
+      <div class="msg-ko">안녕하세요, AI 도구로 한글에서 영문으로 번역한 전자책 원고가 있습니다. 문법·철자·구두점·흐름 교정을 원합니다. 약 [단어 수]단어, 교육용 전자책입니다. 가격·납기·Track Changes 여부를 알려주세요.</div>
+    </div>
+    <div class="msg-card">
+      <div class="msg-card-head">
+        <div class="msg-card-title">두 번째 메시지 — 금액·납기 협상</div>
+        <button class="copy-btn" onclick="copyMsg('cm2',this)">복사</button>
+      </div>
+      <div class="msg-text" id="cm2">Thank you for your response!
+
+Before I place the order, I have a few questions:
+1. Is there any discount available for the full manuscript ([WORD COUNT] words)?
+2. Can you deliver within [NUMBER] days?
+3. Do you offer one round of free revision if I have concerns about specific sections?
+
+I look forward to working with you!</div>
+      <div class="msg-ko">답변 감사합니다! 전체 원고([단어 수]단어) 할인 가능한가요? [숫자]일 이내 납기 가능한가요? 무료 수정 1회 제공 가능한가요?</div>
+    </div>
+  </div>
+
+  <div class="msg-panel" id="mp-upwork">
+    <div class="msg-card">
+      <div class="msg-card-head">
+        <div class="msg-card-title">Job Post 제목</div>
+        <button class="copy-btn" onclick="copyMsg('cm3',this)">복사</button>
+      </div>
+      <div class="msg-text" id="cm3">Native English Proofreader Needed for Educational Ebook (~[WORD COUNT] words)</div>
+    </div>
+    <div class="msg-card">
+      <div class="msg-card-head">
+        <div class="msg-card-title">Job Post 본문</div>
+        <button class="copy-btn" onclick="copyMsg('cm4',this)">복사</button>
+      </div>
+      <div class="msg-text" id="cm4">I am looking for an experienced native English proofreader to review an educational ebook manuscript.
+
+About the project:
+- The manuscript was originally written in Korean and translated into English using AI tools (Claude/DeepL)
+- Topic: Ebook planning, design, and self-publishing for graduate students
+- Word count: approximately [WORD COUNT] words
+- File format: Microsoft Word (.docx)
+
+What I need:
+- Grammar, spelling, and punctuation correction
+- Improving sentence flow and natural English expression
+- Ensuring consistent tone suitable for an educational audience
+- Please use Track Changes so I can review each edit
+
+Please include in your proposal:
+- Your fixed price or hourly rate for this project
+- Estimated delivery time
+- A short sample edit (optional but preferred)
+
+Looking forward to working with a detail-oriented professional!</div>
+      <div class="msg-ko">교육용 전자책 원고의 원어민 교정자를 구합니다. 한글로 작성 후 AI 번역. 약 [단어 수]단어, Word 파일. 문법·구두점·톤 유지·Track Changes 필수. 제안서에 가격·납기·샘플 편집 포함해 주세요.</div>
+    </div>
+  </div>
+
+  <div style="height:1.5rem;"></div>
+  <div class="tip">
+    <div class="tip-icon">💡</div>
+    <div class="tip-body">
+      <strong>처음 의뢰할 때 추천 방법</strong>
+      <p>Fiverr에서 리뷰 50개 이상, 별점 4.8 이상 Level 1~2 셀러에게 1,000~2,000단어 소량 샘플 교정을 먼저 맡겨 품질을 확인한 뒤 전체 원고를 의뢰하세요. 비용 낭비 없이 안전하게 시작할 수 있습니다.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  전자책 출판 도구 · Amazon KDP 준비 · 단어 수 확인 & 교정 비용 계산기 · 2026
+</footer>
+
+<script>
+/* ── PAGE NAV ── */
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── WORD COUNTER ── */
+const STOP = new Set(['the','a','an','and','or','but','in','on','at','to','for','of','with','by','from','is','are','was','were','be','been','being','have','has','had','do','does','did','will','would','could','should','may','might','shall','can','this','that','these','those','it','its','i','you','he','she','we','they','my','your','his','her','our','their','as','if','not','so','up','out','about','into','then','than','also','just','more','which','what','when','where','who','how','all','any','each','other','after','before','over','under','between','through','during','while','however','therefore','thus','such','both','either','neither','here','there','now','only','very','quite','rather','even','much','many','some','few','no','yes','well','back','still','again','new','first','last','own','same','good','great']);
+
+let target = 5000;
+let currentWC = 0;
+
+function analyze() {
+  const text = document.getElementById('wc-area').value;
+  const words = text.trim() ? text.trim().split(/\s+/).filter(w => w) : [];
+  const wc = words.length;
+  currentWC = wc;
+  const ch = text.length;
+  const ch2 = text.replace(/\s/g, '').length;
+  const sent = text.trim() ? (text.match(/[^.!?]+[.!?]+/g) || []).length || 1 : 0;
+  const para = text.trim() ? text.split(/\n\s*\n/).filter(p => p.trim()).length || 1 : 0;
+  const avg = sent > 0 ? (wc / sent).toFixed(1) : 0;
+  const read = wc > 0 ? Math.ceil(wc / 200) : 0;
+  const unique = new Set(words.map(w => w.toLowerCase().replace(/[^a-z]/g,''))).size;
+  const pages = wc > 0 ? (wc / 275).toFixed(1) : 0;
+
+  document.getElementById('wc-words').textContent = wc.toLocaleString();
+  document.getElementById('wc-char').textContent = ch.toLocaleString();
+  document.getElementById('wc-char2').textContent = ch2.toLocaleString();
+  document.getElementById('wc-read').textContent = read + '분';
+  document.getElementById('wc-sent').textContent = sent;
+  document.getElementById('wc-para').textContent = para;
+  document.getElementById('d-words').textContent = wc.toLocaleString();
+  document.getElementById('d-unique').textContent = unique.toLocaleString();
+  document.getElementById('d-sent').textContent = sent;
+  document.getElementById('d-para2').textContent = para;
+  document.getElementById('d-avg').textContent = avg;
+  document.getElementById('d-page').textContent = pages + ' 페이지';
+
+  const c1 = Math.round(wc * 0.01);
+  const c2 = Math.round(wc * 0.02);
+  const c4 = Math.round(wc * 0.04);
+  const hrs = Math.max(1, Math.round(wc / 3000));
+  const hre = Math.max(2, Math.round(wc / 2000));
+  const tot = Math.round(c2 * 1.055 + (c2 < 100 ? 3.5 : 0));
+  document.getElementById('q-low').textContent = '$' + c1.toLocaleString();
+  document.getElementById('q-mid').textContent = '$' + c2.toLocaleString();
+  document.getElementById('q-hi').textContent = '$' + c4.toLocaleString();
+  document.getElementById('q-up1').textContent = '$' + (hrs * 15).toLocaleString();
+  document.getElementById('q-up2').textContent = '$' + (hre * 25).toLocaleString();
+  document.getElementById('q-tot').textContent = '$' + tot.toLocaleString();
+
+  updateProg(wc);
+  updateKW(words);
+}
+
+function updateProg(wc) {
+  const pct = Math.min(100, Math.round(wc / target * 100));
+  const fill = document.getElementById('pg-fill');
+  fill.style.width = pct + '%';
+  fill.className = 'fill' + (pct >= 100 ? ' done' : pct >= 70 ? ' warn' : '');
+  document.getElementById('pg-pct').textContent = pct + '%';
+  document.getElementById('pg-words').textContent = wc.toLocaleString();
+  const rem = Math.max(0, target - wc);
+  document.getElementById('pg-msg').textContent =
+    wc === 0 ? '텍스트를 입력하면 진행률이 표시됩니다' :
+    pct >= 100 ? '목표 달성! KDP 출간 준비 완료 🎉' :
+    '목표까지 ' + rem.toLocaleString() + '단어 남음';
+}
+
+function setTarget(t, btn) {
+  target = t;
+  document.querySelectorAll('.tpill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pg-target-lbl').textContent = t.toLocaleString();
+  updateProg(currentWC);
+}
+
+function updateKW(words) {
+  if (!words.length) { document.getElementById('kw-list').innerHTML = '<div class="kw-empty">텍스트를 입력하면 키워드 분석이 표시됩니다.</div>'; return; }
+  const freq = {};
+  words.forEach(w => { const c = w.toLowerCase().replace(/[^a-z]/g,''); if (c.length > 2 && !STOP.has(c)) freq[c] = (freq[c]||0)+1; });
+  const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  if (!sorted.length) { document.getElementById('kw-list').innerHTML = '<div class="kw-empty">분석할 키워드가 없습니다.</div>'; return; }
+  const max = sorted[0][1];
+  document.getElementById('kw-list').innerHTML = sorted.map(([w,c],i) =>
+    `<div class="kw-row"><span class="kw-n">${i+1}</span><span class="kw-w">${w}</span><div class="kw-bar-bg"><div class="kw-bar-fg" style="width:${Math.round(c/max*100)}%"></div></div><span class="kw-c">${c}회</span></div>`
+  ).join('');
+}
+
+async function doPaste() {
+  try { const t = await navigator.clipboard.readText(); document.getElementById('wc-area').value = t; analyze(); } catch(e) { document.getElementById('wc-area').focus(); }
+}
+function doCopy() { navigator.clipboard.writeText(document.getElementById('wc-area').value); }
+function doClear() { document.getElementById('wc-area').value = ''; analyze(); }
+function sendToCalc() {
+  const wc = currentWC;
+  if (wc > 0) {
+    document.getElementById('sl').value = Math.min(60000, Math.round(wc / 1000) * 1000);
+    calcUpdate();
+  }
+  showPage('calc', document.querySelectorAll('.nav-tab')[2]);
+}
+document.getElementById('wc-area').addEventListener('input', analyze);
+analyze();
+
+/* ── CALCULATOR ── */
+let tierRate = 0.01;
+
+function pickTier(btn) {
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  tierRate = parseFloat(btn.dataset.rate);
+  calcUpdate();
+}
+
+function calcUpdate() {
+  const w = parseInt(document.getElementById('sl').value);
+  document.getElementById('sl-disp').innerHTML = w.toLocaleString() + ' <span>words</span>';
+  const base = Math.round(w * tierRate);
+  const fee = parseFloat((base * 0.055).toFixed(2));
+  const extra = base < 100 ? 3.5 : 0;
+  const total = Math.round((base + fee + extra) * 10) / 10;
+  const hrs = Math.max(1, Math.round(w / 3000));
+  const hre = Math.max(2, Math.round(w / 2000));
+  const upLow = hrs * 15, upHigh = hre * 25;
+
+  document.getElementById('r-fiverr').textContent = '$' + base.toLocaleString();
+  document.getElementById('r-fiverr-sub').textContent = '$' + tierRate + '/단어 × ' + w.toLocaleString() + '단어';
+  document.getElementById('r-upwork').textContent = '$' + upLow.toLocaleString() + '–' + upHigh.toLocaleString();
+  document.getElementById('r-upwork-sub').textContent = '시간당 $15~$25 × ' + hrs + '~' + hre + '시간';
+  document.getElementById('r-total').textContent = '$' + total.toLocaleString();
+  document.getElementById('bd1').textContent = '$' + base.toLocaleString();
+  document.getElementById('bd2').textContent = '$' + fee.toFixed(2);
+  document.getElementById('bd3').textContent = extra > 0 ? '$3.50' : '$0';
+  document.getElementById('bd4').textContent = '$' + total.toLocaleString();
+  const pgMin = Math.round(w/300), pgMax = Math.round(w/250);
+  document.getElementById('page-est').textContent = '약 ' + pgMin + '~' + pgMax + '페이지';
+}
+document.getElementById('sl').addEventListener('input', calcUpdate);
+calcUpdate();
+
+/* ── MSG ── */
+function switchMsg(id, btn) {
+  document.querySelectorAll('.msg-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.msg-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('mp-' + id).classList.add('active');
+}
+function copyMsg(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+    btn.textContent = '복사됨 ✓'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('ok'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
