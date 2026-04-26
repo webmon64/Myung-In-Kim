@@ -239,10 +239,34 @@
   .flash-card:hover { box-shadow: var(--shadow-lg); border-color: var(--gold-light); }
   .flash-card:active { transform: scale(.985); }
   .flash-en { font-family: var(--font-gothic); font-size: 1.7rem; font-weight: 700; color: var(--charcoal); margin-bottom: 4px; letter-spacing: -.02em; }
-  .flash-phonetic { font-family: Georgia, serif; font-style: italic; font-size: 13px; color: var(--charcoal-light); margin-bottom: 10px; }
-  .flash-ko { font-size: 15px; color: var(--charcoal-mid); display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); width: 100%; }
-  .flash-card.flipped .flash-ko { display: block; }
+  .flash-phonetic { font-family: var(--font-gothic); font-style: italic; font-size: 12.5px; color: var(--charcoal-light); margin-bottom: 8px; }
+
+  /* 한국어 해석 — 항상 표시, 뒤집기 전엔 흐리게 */
+  .flash-ko {
+    font-size: 14.5px; color: var(--charcoal-light);
+    margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid var(--border); width: 100%;
+    opacity: 0.35;                     /* 앞면: 흐리게 */
+    filter: blur(3px);                 /* 앞면: 살짝 블러 */
+    user-select: none;
+    transition: opacity .3s, filter .3s;
+    display: block;                    /* 항상 표시 */
+    font-weight: 500;
+  }
+  /* 뒤집으면 선명하게 */
+  .flash-card.flipped .flash-ko {
+    opacity: 1;
+    filter: none;
+    color: var(--charcoal-mid);
+  }
   .flash-card.flipped::after { content: 'TAP'; }
+
+  /* 발음 패널 안의 한국어 해석 (새로 추가) */
+  .pronun-ko {
+    font-size: 12.5px; color: var(--charcoal-light);
+    margin-top: 4px; line-height: 1.5;
+    padding-bottom: 4px;
+  }
 
   .flash-nav { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
   .nav-btn {
@@ -1241,6 +1265,7 @@
       <div class="flash-en" id="flashEn">—</div>
       <div class="flash-phonetic" id="flashPhonetic"></div>
       <div class="flash-ko" id="flashKo">—</div>
+      <div style="font-size:10.5px;color:var(--charcoal-light);opacity:.5;margin-top:4px;" id="flashKoHint">탭하면 해석이 선명해집니다</div>
     </div>
 
     <!-- 네비게이션 -->
@@ -1254,6 +1279,7 @@
     <div class="pronun-card">
       <div class="pronun-card-title">🎤 발음 확인</div>
       <div class="pronun-target" id="practiceTarget">카드를 선택하면 따라 말하기가 시작됩니다</div>
+      <div class="pronun-ko" id="practiceTargetKo"></div>
       <div class="pronun-btns">
         <button class="listen-btn" id="listenBtn" onclick="speakCurrent()">🔊 원어민 발음</button>
         <button class="mic-btn"    id="micBtn"    onclick="toggleMic()">🎤 내 발음 녹음</button>
@@ -14059,6 +14085,8 @@ function updateFlashCard() {
   if (!w) return;
   isFlipped = false;
   document.getElementById('flashCard').classList.remove('flipped');
+  const kh = document.getElementById('flashKoHint');
+  if (kh) kh.style.display = '';
   document.getElementById('flashEn').textContent       = w.front;
   document.getElementById('flashPhonetic').textContent = w.phonetic || '';
   document.getElementById('flashKo').textContent       = w.back;
@@ -14068,6 +14096,8 @@ function updateFlashCard() {
   if (catBadge) catBadge.textContent = `${w.cat || ''} · Lv.${w.level||''}`;
   document.getElementById('cardProgress').textContent  = `카드 ${(flashIdx+1).toLocaleString()} / ${flashCards.length.toLocaleString()}`;
   document.getElementById('practiceTarget').textContent= `"${w.front}" 을 따라 말해보세요`;
+  const koEl = document.getElementById('practiceTargetKo');
+  if (koEl) koEl.textContent = w.back || '';
   document.getElementById('resultBox').style.display   = 'none';
   // Progress bar
   const pct = flashCards.length > 1 ? (flashIdx / (flashCards.length-1) * 100).toFixed(1) : 100;
@@ -14080,6 +14110,8 @@ function updateFlashCard() {
 function flipCard() {
   isFlipped = !isFlipped;
   document.getElementById('flashCard').classList.toggle('flipped', isFlipped);
+  const hint = document.getElementById('flashKoHint');
+  if (hint) hint.style.display = isFlipped ? 'none' : '';
 }
 function nextCard() { flashIdx=(flashIdx+1)%flashCards.length; updateFlashCard(); }
 function prevCard() { flashIdx=(flashIdx-1+flashCards.length)%flashCards.length; updateFlashCard(); }
