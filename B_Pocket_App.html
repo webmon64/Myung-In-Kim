@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>비슈케크 포켓 — 출장 영어·러시아어</title>
+<style>
+  :root{
+    --bg:#E9EDF1; --paper:#FFFFFF; --ink:#163A5C; --ink-soft:#2E5680;
+    --muted:#647082; --line:#E2E7EC; --red:#C0463E; --red-soft:#FBEDEC;
+    --amber:#B7791F; --amber-soft:#FBF3E2;
+    --shadow:0 1px 2px rgba(22,58,92,.06),0 8px 24px rgba(22,58,92,.08);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Noto Sans KR",Roboto,sans-serif;
+    display:flex;justify-content:center;overflow:hidden}
+  .phone{position:relative;width:100%;max-width:430px;height:100vh;height:100dvh;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 60px rgba(22,58,92,.12)}
+  @media(min-width:480px){.phone{height:94vh;border-radius:34px}body{align-items:center}}
+
+  header{background:linear-gradient(135deg,#173A5C,#0F2A45);color:#fff;padding:16px 18px 12px;flex-shrink:0}
+  .htop{display:flex;align-items:center;justify-content:space-between}
+  .route{display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.14em;color:#9FBBD6;font-weight:600}
+  .title{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:3px}
+  .title small{font-weight:500;color:#B8CCE0;font-size:12px;letter-spacing:0;margin-left:6px}
+  .spd{display:flex;align-items:center;gap:9px;margin-top:11px;background:rgba(255,255,255,.10);padding:8px 12px;border-radius:12px}
+  .spd label{font-size:11px;font-weight:700;color:#CFE0F0;letter-spacing:.04em;flex-shrink:0}
+  .spd input[type=range]{flex:1;accent-color:#FFD9A0;height:4px}
+  .spd .val{font-size:12px;font-weight:800;color:#FFD9A0;width:38px;text-align:right;flex-shrink:0}
+
+  main{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 96px}
+  .pane{display:none}
+  .pane.on{display:block;animation:fade .22s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .eyebrow{font-size:11px;letter-spacing:.16em;font-weight:700;color:var(--ink-soft);text-transform:uppercase;margin:4px 2px 8px}
+  .glabel{font-size:13px;font-weight:800;color:var(--ink);margin:18px 4px 8px;display:flex;align-items:center;gap:8px}
+  .glabel .dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
+  .glabel.ru .dot{background:var(--ink-soft)}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+  .row{display:flex;align-items:center;gap:11px;padding:12px 13px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s}
+  .row:last-child{border-bottom:none}
+  .row:active{background:#F4F7FA}
+  .row .txt{flex:1;min-width:0}
+  .row .en{font-size:15.5px;font-weight:700;letter-spacing:-.01em}
+  .row .en.ru{color:#173A5C;font-size:16px}
+  .row .read{font-size:13px;font-weight:600;color:var(--ink-soft);margin-top:1px}
+  .row .ko{font-size:12px;color:var(--muted);margin-top:2px}
+  .hl{color:var(--red);font-weight:800}
+  .star{font-size:17px;color:#D6DBE1;line-height:1;padding:4px;flex-shrink:0}
+  .star.on{color:#E8B23E}
+
+  .spk{flex-shrink:0;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#F3F6F9;display:grid;place-items:center;color:var(--ink-soft);position:relative}
+  .spk svg{width:18px;height:18px}
+  .spk.playing{background:var(--red);border-color:var(--red);color:#fff}
+  .spk.playing::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--red);opacity:.5;animation:pulse 1s ease-out infinite}
+  @keyframes pulse{from{transform:scale(.85);opacity:.55}to{transform:scale(1.35);opacity:0}}
+
+  /* pattern */
+  .pat{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin-bottom:11px;overflow:hidden}
+  .pat .ph{background:var(--red-soft);padding:11px 14px;font-size:15px;font-weight:800;color:var(--red);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+  .pat .ph .rank{background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px;flex-shrink:0;letter-spacing:.02em}
+  .pat .ex{display:flex;align-items:center;gap:10px;padding:10px 13px;border-bottom:1px solid var(--line);cursor:pointer}
+  .pat .ex:last-child{border-bottom:none}
+  .pat .ex:active{background:#F4F7FA}
+  .pat .ex .txt{flex:1;min-width:0}
+  .pat .ex .e{font-size:14.5px;font-weight:700;color:var(--ink)}
+  .pat .ex .k{font-size:12px;color:var(--muted);margin-top:1px}
+
+  /* roleplay */
+  .scene-h{font-size:15px;font-weight:800;margin:20px 4px 3px}
+  .scene-sub{font-size:12px;color:var(--muted);margin:0 4px 9px}
+  .turn{display:flex;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line);align-items:flex-start}
+  .turn:last-child{border-bottom:none}
+  .who{font-size:10px;font-weight:800;letter-spacing:.03em;color:var(--muted);width:56px;flex-shrink:0;padding-top:3px;text-transform:uppercase}
+  .turn.me{background:var(--red-soft)}
+  .turn.me .who{color:var(--red)}
+  .bub{flex:1;min-width:0}
+  .bub .en{font-size:15px;font-weight:700}
+  .turn.me .bub .en{color:#8C3530}
+  .bub .ko{font-size:12px;color:var(--muted);margin-top:2px}
+  .cover{background:#fff;border:1px dashed var(--red);border-radius:10px;padding:9px 12px;font-size:12.5px;font-weight:700;color:var(--red);text-align:center;cursor:pointer;margin-top:2px}
+  .miniplay{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#EEF2F6;display:grid;place-items:center;color:var(--ink-soft)}
+  .miniplay svg{width:14px;height:14px}
+  .cheat{font-size:11.5px;color:var(--muted);margin:7px 6px 2px}
+  .cheat b{color:var(--red)}
+
+  /* plan */
+  .plan-hero{background:linear-gradient(135deg,#173A5C,#24507A);color:#fff;border-radius:18px;padding:18px 16px;box-shadow:var(--shadow)}
+  .plan-hero h2{margin:0 0 6px;font-size:18px}
+  .plan-hero p{margin:0;font-size:13px;line-height:1.55;color:#CBDBEC}
+  .pcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-top:10px;box-shadow:var(--shadow)}
+  .pcard h3{margin:0 0 8px;font-size:13.5px;display:flex;align-items:center;gap:7px}
+  .pcard h3 .n{background:var(--amber-soft);color:var(--amber);font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px}
+  .pcard ul{margin:0;padding-left:17px;font-size:13px;line-height:1.6;color:#3C4654}
+  .pcard ul b{color:var(--ink)}
+  .wk{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .wk:last-child{border:none}
+  .wk .w{font-size:12px;font-weight:800;color:var(--red);width:42px;flex-shrink:0}
+  .wk .d{font-size:12.5px;color:#3C4654;line-height:1.45}
+  .note{font-size:11.5px;color:var(--muted);text-align:center;margin:18px 8px 4px;line-height:1.5}
+
+  nav{position:absolute;left:0;right:0;bottom:0;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding:6px 2px calc(6px + env(safe-area-inset-bottom));flex-shrink:0}
+  .tab{flex:1;background:none;border:none;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 1px;color:#97A1AE}
+  .tab svg{width:20px;height:20px}
+  .tab span{font-size:9.5px;font-weight:700}
+  .tab.on{color:var(--ink)}
+  .tab.on svg{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <header>
+    <div class="htop">
+      <div>
+        <div class="route">ICN → FRU · 비슈케크</div>
+        <div class="title">비슈케크 포켓 <small>탭하면 들려요</small></div>
+      </div>
+    </div>
+    <div class="spd">
+      <label>말하기 속도</label>
+      <input type="range" id="rate" min="0.5" max="1.3" step="0.05" value="1">
+      <span class="val" id="rateVal">1.0x</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="pane on" id="pane-plan"></section>
+    <section class="pane" id="pane-words"><div class="eyebrow">핵심 단어 · 회화 빈도 순</div><div id="words"></div><p class="note">★ 를 눌러 ‘안 나오는 단어’만 표시하며 자투리에 반복하세요.</p></section>
+    <section class="pane" id="pane-pat"><div class="eyebrow">만능 패턴 100 · 예문 3개씩</div><div id="pats"></div></section>
+    <section class="pane" id="pane-rp"><div class="eyebrow">롤플레이 · 거래편 15 + 대화편 8</div><div id="rp"></div></section>
+    <section class="pane" id="pane-ru"><div class="eyebrow">여행 러시아어 · 강세는 빨간 발음</div><div id="ruList"></div><p class="note">비슈케크 일상어는 러시아어입니다. 막히면 단어 + “빠좔루스타”!</p></section>
+  </main>
+  <nav id="nav"></nav>
+</div>
+
+<script>
+/* ===== speech ===== */
+let voices=[], rate=1;
+function loadVoices(){ voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+if(window.speechSynthesis){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; }
+function pickVoice(lang){ const p=lang.slice(0,2).toLowerCase(); return voices.find(v=>v.lang.toLowerCase().startsWith(p))||null; }
+let curBtn=null;
+function stopPulse(){ if(curBtn){curBtn.classList.remove("playing");curBtn=null;} }
+function speak(text,lang,btn){
+  if(!window.speechSynthesis){ alert("이 브라우저는 음성합성을 지원하지 않습니다."); return; }
+  speechSynthesis.cancel(); stopPulse();
+  const u=new SpeechSynthesisUtterance(text); u.lang=lang; u.rate=rate;
+  const v=pickVoice(lang); if(v) u.voice=v;
+  if(btn){ btn.classList.add("playing"); curBtn=btn; }
+  u.onend=stopPulse; u.onerror=stopPulse;
+  speechSynthesis.speak(u);
+}
+const spkSVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
+const playSVG='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+function hl(rd){ return rd.split('*').map((s,i)=> i%2 ? '<span class="hl">'+s+'</span>' : s).join(''); }
+
+/* ===== DATA: WORDS ===== */
+const WORDS=[
+ {g:"기능어 · 대명사",items:[["I","나"],["You","너 / 당신"],["He","그"],["She","그녀"],["It","그것"],["We","우리"],["They","그들"],["This","이것"],["That","저것 / 그것"],["These","이것들"],["Those","저것들"],["My","나의"],["Your","너의 / 당신의"],["Me","나를 / 나에게"],["Mine","내 것"],["Someone","누군가"],["Something","무언가"],["Everyone","모두"],["Nothing","아무것도"]]},
+ {g:"기능어 · 의문사",items:[["What","무엇"],["Who","누구"],["Where","어디"],["When","언제"],["Why","왜"],["How","어떻게"],["Which","어느 것"],["Whose","누구의"],["How much","얼마 (가격·양)"],["How many","몇 개"],["How long","얼마나 오래"],["What time","몇 시"]]},
+ {g:"기능어 · be · do · have · 조동사",items:[["Is / Are / Am","~이다 (현재)"],["Was / Were","~였다 (과거)"],["Do / Does","하다 / 의문조동사"],["Did","했다 (과거)"],["Have / Has","가지다 / ~했다"],["Can","~할 수 있다"],["Could","~할 수 있을까 (정중)"],["Will","~할 것이다"],["Would","~하겠다 (정중)"],["Should","~해야 한다"],["Must","~해야만 한다"],["May","~해도 된다"]]},
+ {g:"기능어 · 전치사",items:[["In","~ 안에"],["On","~ 위에"],["At","~에 (장소·시간)"],["To","~로 / ~에게"],["From","~에서 / ~부터"],["With","~와 함께"],["For","~을 위해"],["Of","~의"],["By","~ 옆에 / ~로"],["About","~에 대해"],["Next to","~ 옆에"],["In front of","~ 앞에"],["Behind","~ 뒤에"],["Between","~ 사이에"],["Under","~ 아래에"],["After","~ 후에"],["Before","~ 전에"],["Until","~까지"]]},
+ {g:"기능어 · 접속사 · 연결어",items:[["And","그리고"],["But","하지만"],["Or","또는"],["So","그래서"],["Because","왜냐하면"],["If","만약"],["Then","그러면 / 그다음"],["Also","또한"],["Too","~도 역시"],["Like","~처럼"]]},
+ {g:"기능어 · 관사 · 수량어",items:[["A / An","하나의"],["The","그 (특정한)"],["Some","약간의"],["Any","어떤 / 조금도"],["All","모두"],["Many","많은 (셀 수)"],["Much","많은 (양)"],["A lot","많이"],["A little","조금"],["A few","몇 개"],["More","더"],["Less","덜"],["Every","모든"],["No","아무런 ~없는"],["Both","둘 다"],["Most","대부분"]]},
+ {g:"기능어 · 부사",items:[["Here","여기"],["There","거기"],["Now","지금"],["Later","나중에"],["Soon","곧"],["Again","다시"],["Very","매우"],["Really","정말"],["Only","오직"],["Just","막 / 단지"],["Always","항상"],["Never","절대"],["Sometimes","때때로"],["Usually","보통"],["Maybe","아마"],["Of course","물론"],["Together","함께"],["Already","이미"],["Still","여전히"],["Almost","거의"]]},
+ {g:"동사 · 이동 · 동작",items:[["Go","가다"],["Come","오다"],["Get","얻다 / 도착하다"],["Take","가져가다 / 타다"],["Give","주다"],["Bring","가져오다"],["Put","놓다"],["Move","움직이다"],["Walk","걷다"],["Run","달리다"],["Sit","앉다"],["Stand","서다"],["Wait","기다리다"],["Stop","멈추다"],["Start","시작하다"],["Finish","끝내다"],["Open","열다"],["Close","닫다"],["Turn","돌리다 / 켜다"],["Leave","떠나다"],["Arrive","도착하다"],["Stay","머물다"]]},
+ {g:"동사 · 소통 · 생각",items:[["Want","원하다"],["Need","필요하다"],["Like","좋아하다"],["Know","알다"],["Think","생각하다"],["See","보다"],["Look","보다 / 바라보다"],["Hear","듣다"],["Listen","귀 기울이다"],["Say","말하다"],["Tell","말해주다"],["Speak","말하다"],["Talk","이야기하다"],["Ask","묻다"],["Answer","대답하다"],["Help","돕다"],["Understand","이해하다"],["Remember","기억하다"],["Forget","잊다"],["Hope","바라다"],["Feel","느끼다"],["Love","사랑하다"]]},
+ {g:"동사 · 일상 · 기타",items:[["Make","만들다"],["Do","하다"],["Use","사용하다"],["Try","시도하다"],["Find","찾다"],["Look for","찾다 / 구하다"],["Buy","사다"],["Pay","지불하다"],["Eat","먹다"],["Drink","마시다"],["Sleep","자다"],["Show","보여주다"],["Call","부르다 / 전화하다"],["Meet","만나다"],["Change","바꾸다"],["Work","일하다"],["Study","공부하다"],["Learn","배우다"],["Teach","가르치다"],["Read","읽다"],["Write","쓰다"],["Live","살다"],["Choose","고르다"],["Send","보내다"]]},
+ {g:"형용사 · 부사",items:[["Good","좋은"],["Bad","나쁜"],["Big","큰"],["Small","작은"],["New","새로운"],["Old","오래된 / 나이 든"],["Hot","더운 / 뜨거운"],["Cold","추운 / 차가운"],["Warm","따뜻한"],["Cool","시원한"],["Hungry","배고픈"],["Thirsty","목마른"],["Full","배부른"],["Tired","피곤한"],["Sick","아픈"],["Happy","행복한"],["Easy","쉬운"],["Hard","어려운 / 단단한"],["Fast","빠른"],["Slow","느린"],["Early","이른"],["Late","늦은"],["Cheap","싼"],["Expensive","비싼"],["Free","무료의"],["Right","맞는 / 오른쪽"],["Wrong","틀린"],["Same","같은"],["Different","다른"],["Beautiful","아름다운"],["Nice","좋은 / 친절한"],["Kind","친절한"],["Clean","깨끗한"],["Dirty","더러운"],["Empty","빈"],["Ready","준비된"],["Sure","확실한"],["Important","중요한"],["Far","먼"],["Near","가까운"],["Enough","충분한"]]},
+ {g:"명사 · 사람 · 관계",items:[["Person","사람"],["People","사람들"],["Man","남자"],["Woman","여자"],["Child","아이"],["Friend","친구"],["Family","가족"],["Name","이름"],["Teacher","선생님 / 강사"],["Student","학생"],["Doctor","의사"],["Wife","아내"],["Husband","남편"]]},
+ {g:"명사 · 시간",items:[["Time","시간"],["Day","날"],["Today","오늘"],["Tomorrow","내일"],["Yesterday","어제"],["Morning","아침"],["Afternoon","오후"],["Evening","저녁"],["Night","밤"],["Hour","시간 (단위)"],["Minute","분"],["Week","주"],["Month","달 / 월"],["Year","년"],["Weekend","주말"]]},
+ {g:"명사 · 장소",items:[["Place","장소"],["Home","집"],["Hotel","호텔"],["Room","방"],["Restaurant","식당"],["Store","가게"],["Market","시장"],["Street","거리"],["City","도시"],["Country","나라"],["Airport","공항"],["Station","역"],["Bank","은행"],["Toilet","화장실"],["Hospital","병원"],["Pharmacy","약국"]]},
+ {g:"명사 · 사물 · 일상",items:[["Thing","것 / 물건"],["Money","돈"],["Phone","전화 / 휴대폰"],["Water","물"],["Food","음식"],["Bag","가방"],["Key","열쇠"],["Door","문"],["Car","자동차"],["Ticket","표"],["Table","테이블"],["Chair","의자"],["Paper","종이"],["Book","책"],["Number","숫자"],["Problem","문제"],["Question","질문"],["Way","길 / 방법"],["Word","단어"]]},
+ {g:"보강 · 호텔 · 객실",items:[["Blanket","담요"],["Pillow","베개"],["Heater","난방기"],["Air conditioner","에어컨"],["Charger","충전기"],["Socket","콘센트"],["Floor","층"],["Wake-up call","모닝콜"],["Front desk","프런트"],["Extra","추가의"]]},
+ {g:"보강 · 식당 · 음식",items:[["Spicy","매운"],["Fork","포크"],["Spoon","숟가락"],["Napkin","냅킨"],["Bread","빵"],["Tea","차"],["Soup","수프"],["Meat","고기"],["Vegetable","채소"],["Recommend","추천하다"],["Local","현지의 · 전통의"]]},
+ {g:"보강 · 쇼핑 · 돈 · 이동",items:[["Change","거스름돈"],["Size","크기 · 사이즈"],["Bazaar","시장 (바자르)"],["ATM","현금인출기"],["Exchange","환전"],["SIM card","유심칩"],["Address","주소"],["Meter","미터기"],["Corner","모퉁이"],["Center","시내 · 중심"]]},
+ {g:"보강 · 도움 · 건강 · 날씨",items:[["Clinic","진료소"],["Medicine","약"],["Headache","두통"],["Stomachache","복통"],["Emergency","응급 상황"],["Weather","날씨"],["Winter","겨울"],["Hospitality","환대"]]},
+ {g:"보강 II · 교통 · 장소",items:[["Taxi","택시"],["Bus","버스"],["Lobby","로비"],["Entrance","입구"],["Exit","출구"],["Square","광장"]]},
+ {g:"보강 II · 호텔 · 예약",items:[["Reservation","예약"],["Check-in","체크인"],["Check-out","체크아웃"],["Wifi","와이파이"],["Password","비밀번호"]]},
+ {g:"보강 II · 식당 · 음식",items:[["Coffee","커피"],["Breakfast","아침 · 조식"],["Lunch","점심"],["Dinner","저녁"],["Order","주문(하다)"],["Receipt","영수증"],["Dish","요리"],["Beef","소고기"],["Chicken","닭고기"],["Rice","밥"],["Egg","달걀"],["Fruit","과일"]]},
+ {g:"보강 II · 동작 · 대화",items:[["Rest","쉬다"],["Visit","방문하다"],["Join","함께하다"],["Travel","여행하다"],["Trip","여행"],["Welcome","환영하다"]]},
+ {g:"보강 II · 기타",items:[["Lecture","강의"],["Meeting","회의"],["Bathroom","화장실"],["Sign","표지판"],["Traditional","전통의"],["Cash","현금"],["Contact","연락처"]]},
+ {g:"보강 III · 음식 · 식재료",items:[["Noodles","국수"],["Salad","샐러드"],["Yogurt","요거트"],["Cheese","치즈"],["Fish","생선"],["Lamb","양고기"],["Potato","감자"],["Onion","양파"],["Salt","소금"],["Sugar","설탕"],["Sauce","소스"],["Dessert","디저트"],["Snack","간식"],["Juice","주스"],["Milk","우유"],["Beer","맥주"],["Wine","와인"]]},
+ {g:"보강 III · 감정 · 상태 형용사",items:[["Great","아주 좋은"],["Wonderful","훌륭한"],["Amazing","굉장한"],["Delicious","맛있는"],["Excited","신나는 · 기대되는"],["Interesting","흥미로운"],["Boring","지루한"],["Comfortable","편안한"],["Glad","기쁜"],["Worried","걱정되는"],["Nervous","긴장되는"],["Lucky","운 좋은"],["Funny","재미있는"],["Strange","이상한"],["Quiet","조용한"],["Busy","바쁜"],["Friendly","친근한"],["Famous","유명한"]]}
+];
+
+/* ===== DATA: PATTERNS (3 examples each) ===== */
+const PATS=[
+ {sec:"요청 · 부탁하기"},
+ {p:"Can I get ___?",ex:[["Can I get a fork?","포크 좀 주세요"],["Can I get more towels?","수건 좀 더 주세요"],["Can I get some water?","물 좀 주세요"]]},
+ {p:"Can I have ___?",ex:[["Can I have the bill?","계산서 주세요"],["Can I have the menu?","메뉴 주세요"],["Can I have a receipt?","영수증 주세요"]]},
+ {p:"Could you ___?",ex:[["Could you help me?","도와주시겠어요?"],["Could you say that again?","다시 말씀해 주시겠어요?"],["Could you write it down?","적어 주시겠어요?"]]},
+ {p:"I'd like ___, please.",ex:[["I'd like this one, please.","이걸로 주세요"],["I'd like a coffee, please.","커피 주세요"],["I'd like to check in, please.","체크인할게요"]]},
+ {p:"One more ___, please.",ex:[["One more towel, please.","수건 하나 더요"],["One more coffee, please.","커피 하나 더요"],["One more time, please.","한 번만 더요"]]},
+ {sec:"질문하기"},
+ {p:"Where is ___?",ex:[["Where is the bathroom?","화장실 어디예요?"],["Where is the exit?","출구 어디예요?"],["Where is the elevator?","엘리베이터 어디예요?"]]},
+ {p:"Where can I get ___?",ex:[["Where can I get a taxi?","택시 어디서 타요?"],["Where can I get a SIM card?","유심 어디서 사요?"],["Where can I get water?","물 어디서 사요?"]]},
+ {p:"How much is ___?",ex:[["How much is this?","이거 얼마예요?"],["How much is the ticket?","표 얼마예요?"],["How much is a taxi to the hotel?","호텔까지 택시 얼마예요?"]]},
+ {p:"What time is ___?",ex:[["What time is breakfast?","조식 몇 시예요?"],["What time is checkout?","체크아웃 몇 시예요?"],["What time is the meeting?","회의 몇 시예요?"]]},
+ {p:"Do you have ___?",ex:[["Do you have a bag?","봉투 있어요?"],["Do you have wifi?","와이파이 있어요?"],["Do you have an English menu?","영어 메뉴 있어요?"]]},
+ {p:"Is it far to ___?",ex:[["Is it far to the center?","시내까지 멀어요?"],["Is it far to the hotel?","호텔까지 멀어요?"],["Is it far to the airport?","공항까지 멀어요?"]]},
+ {p:"Can I pay by ___?",ex:[["Can I pay by card?","카드로 돼요?"],["Can I pay by cash?","현금으로 돼요?"],["Can I pay here?","여기서 결제돼요?"]]},
+ {sec:"상태 · 문제 말하기"},
+ {p:"The ___ is not working.",ex:[["The wifi is not working.","와이파이가 안 돼요"],["The heater is not working.","난방이 안 돼요"],["The key is not working.","키가 안 돼요"]]},
+ {p:"The ___ is too ___.",ex:[["The room is too cold.","방이 너무 추워요"],["The food is too spicy.","음식이 너무 매워요"],["This is too expensive.","이거 너무 비싸요"]]},
+ {p:"I can't ___.",ex:[["I can't eat this.","저는 이거 못 먹어요"],["I can't find my room.","제 방을 못 찾겠어요"],["I can't hear you.","잘 안 들려요"]]},
+ {p:"I need ___.",ex:[["I need a doctor.","의사가 필요해요"],["I need help.","도움이 필요해요"],["I need a taxi.","택시가 필요해요"]]},
+ {p:"I'm looking for ___.",ex:[["I'm looking for a pharmacy.","약국을 찾고 있어요"],["I'm looking for my hotel.","제 호텔을 찾고 있어요"],["I'm looking for the bus station.","버스 정류장을 찾고 있어요"]]},
+ {p:"I'm ___.",ex:[["I'm lost.","길을 잃었어요"],["I'm full.","배불러요"],["I'm tired.","피곤해요"]]},
+ {sec:"사교 · 인사하기"},
+ {p:"I'm from ___.",ex:[["I'm from Korea.","한국에서 왔어요"],["I'm from Seoul.","서울에서 왔어요"],["I'm from a university in Korea.","한국 대학에서 왔어요"]]},
+ {p:"This is ___.",ex:[["This is delicious.","정말 맛있어요"],["This is beautiful.","정말 아름다워요"],["This is my first time here.","여기는 처음이에요"]]},
+ {p:"Your ___ is beautiful.",ex:[["Your country is beautiful.","이 나라가 아름답네요"],["Your city is beautiful.","이 도시가 아름답네요"],["Your food is wonderful.","음식이 훌륭하네요"]]},
+ {p:"Thank you for ___.",ex:[["Thank you for your help.","도와주셔서 감사합니다"],["Thank you for your hospitality.","환대해 주셔서 감사합니다"],["Thank you for everything.","여러 가지로 감사합니다"]]},
+ {p:"It was nice ___.",ex:[["It was nice talking to you.","얘기 즐거웠어요"],["It was nice meeting you.","만나서 반가웠어요"],["It was a great lecture.","강의 좋았어요"]]},
+ {sec:"기본 회화 핵심 줄기 77 · 많이 쓰는 순"},
+ {n:"01",p:"I want ___.",ex:[["I want some water.","물 좀 주세요"],["I want a coffee.","커피 마시고 싶어요"],["I want this one.","이걸로 할래요"]]},
+ {n:"02",p:"I want to ___.",ex:[["I want to go home.","집에 가고 싶어요"],["I want to rest.","쉬고 싶어요"],["I want to see the city.","도시를 구경하고 싶어요"]]},
+ {n:"03",p:"Can I ___?",ex:[["Can I sit here?","여기 앉아도 돼요?"],["Can I try this?","이거 먹어봐도 돼요?"],["Can I take a photo?","사진 찍어도 돼요?"]]},
+ {n:"04",p:"Can you ___?",ex:[["Can you help me?","도와주실 수 있어요?"],["Can you wait a minute?","잠깐 기다려 주실래요?"],["Can you call a taxi?","택시 좀 불러 주실래요?"]]},
+ {n:"05",p:"It's ___.",ex:[["It's okay.","괜찮아요"],["It's too expensive.","너무 비싸요"],["It's very cold today.","오늘 너무 추워요"]]},
+ {n:"06",p:"Is it ___?",ex:[["Is it open?","영업 중이에요?"],["Is it free?","무료예요?"],["Is it far?","멀어요?"]]},
+ {n:"07",p:"Do you ___?",ex:[["Do you speak English?","영어 하세요?"],["Do you understand?","이해되세요?"],["Do you have time?","시간 있으세요?"]]},
+ {n:"08",p:"I like ___.",ex:[["I like this place.","여기 마음에 들어요"],["I like the food here.","여기 음식이 좋아요"],["I like your city.","이 도시가 좋아요"]]},
+ {n:"09",p:"I don't like ___.",ex:[["I don't like spicy food.","매운 건 못 먹어요"],["I don't like the cold.","추운 건 싫어요"],["I don't like crowds.","사람 많은 곳은 싫어요"]]},
+ {n:"10",p:"I think ___.",ex:[["I think it's great.","좋은 것 같아요"],["I think it's too far.","너무 먼 것 같아요"],["I think you're right.","맞는 말씀이세요"]]},
+ {n:"11",p:"I don't think ___.",ex:[["I don't think so.","아닌 것 같아요"],["I don't think it's open.","안 연 것 같아요"],["I don't think I can.","못 할 것 같아요"]]},
+ {n:"12",p:"Let's ___.",ex:[["Let's go.","가요"],["Let's eat.","먹어요"],["Let's take a photo.","사진 찍어요"]]},
+ {n:"13",p:"Let me ___.",ex:[["Let me think.","생각 좀 할게요"],["Let me see.","어디 봅시다"],["Let me try.","제가 해볼게요"]]},
+ {n:"14",p:"I'm going to ___.",ex:[["I'm going to the hotel.","호텔에 가요"],["I'm going to rest.","쉬려고요"],["I'm going to call a taxi.","택시 부를게요"]]},
+ {n:"15",p:"I have ___.",ex:[["I have a question.","질문이 있어요"],["I have a reservation.","예약했어요"],["I have a problem.","문제가 있어요"]]},
+ {n:"16",p:"I don't have ___.",ex:[["I don't have cash.","현금이 없어요"],["I don't have time.","시간이 없어요"],["I don't have a ticket.","표가 없어요"]]},
+ {n:"17",p:"There is ___.",ex:[["There is a problem.","문제가 있어요"],["There's a taxi over there.","저기 택시가 있어요"],["There are two of us.","저희 두 명이에요"]]},
+ {n:"18",p:"Is there ___?",ex:[["Is there a bathroom here?","여기 화장실 있어요?"],["Is there a bank near here?","근처에 은행 있어요?"],["Is there a problem?","무슨 문제 있어요?"]]},
+ {n:"19",p:"How about ___?",ex:[["How about this one?","이건 어때요?"],["How about tomorrow?","내일은 어때요?"],["How about some tea?","차 한잔 어때요?"]]},
+ {n:"20",p:"What about ___?",ex:[["What about you?","당신은요?"],["What about tomorrow?","내일은요?"],["What about this one?","이건요?"]]},
+ {n:"21",p:"Would you like ___?",ex:[["Would you like some tea?","차 좀 드릴까요?"],["Would you like some water?","물 좀 드릴까요?"],["Would you like more?","더 드릴까요?"]]},
+ {n:"22",p:"Would you like to ___?",ex:[["Would you like to join us?","같이 하실래요?"],["Would you like to sit?","앉으시겠어요?"],["Would you like to see it?","보시겠어요?"]]},
+ {n:"23",p:"Do you want ___?",ex:[["Do you want some tea?","차 드실래요?"],["Do you want this?","이거 드실래요?"],["Do you want a bag?","봉투 드릴까요?"]]},
+ {n:"24",p:"Do you want to ___?",ex:[["Do you want to go?","가실래요?"],["Do you want to eat?","드실래요?"],["Do you want to rest?","쉬실래요?"]]},
+ {n:"25",p:"Do you know ___?",ex:[["Do you know where it is?","여기 어딘지 아세요?"],["Do you know this place?","여기 아세요?"],["Do you know the way?","길 아세요?"]]},
+ {n:"26",p:"Do you need ___?",ex:[["Do you need help?","도움 필요하세요?"],["Do you need anything?","뭐 필요하세요?"],["Do you need a receipt?","영수증 필요하세요?"]]},
+ {n:"27",p:"What is ___?",ex:[["What is this?","이건 뭐예요?"],["What is your name?","이름이 뭐예요?"],["What is the problem?","뭐가 문제예요?"]]},
+ {n:"28",p:"What kind of ___?",ex:[["What kind of food is this?","이건 무슨 음식이에요?"],["What kind of tea do you have?","무슨 차 있어요?"],["What kind of place is it?","어떤 곳이에요?"]]},
+ {n:"29",p:"What do you ___?",ex:[["What do you recommend?","뭘 추천하세요?"],["What do you mean?","무슨 뜻이에요?"],["What do you think?","어떻게 생각하세요?"]]},
+ {n:"30",p:"Where do you ___?",ex:[["Where do you live?","어디 사세요?"],["Where do you work?","어디서 일하세요?"],["Where do you want to go?","어디 가고 싶으세요?"]]},
+ {n:"31",p:"When is ___?",ex:[["When is breakfast?","조식 언제예요?"],["When is the meeting?","회의 언제예요?"],["When is checkout?","체크아웃 언제예요?"]]},
+ {n:"32",p:"How do I ___?",ex:[["How do I get there?","거기 어떻게 가요?"],["How do I use it?","이거 어떻게 써요?"],["How do I say this?","이거 어떻게 말해요?"]]},
+ {n:"33",p:"How do you ___?",ex:[["How do you say this in English?","이거 영어로 어떻게 말해요?"],["How do you make this?","이거 어떻게 만들어요?"],["How do you like it?","어때요?"]]},
+ {n:"34",p:"How far is ___?",ex:[["How far is the hotel?","호텔까지 얼마나 멀어요?"],["How far is the airport?","공항까지 얼마나 멀어요?"],["How far is the center?","시내까지 얼마나 멀어요?"]]},
+ {n:"35",p:"How long does it take to ___?",ex:[["How long does it take to get there?","거기까지 얼마나 걸려요?"],["How long does it take by taxi?","택시로 얼마나 걸려요?"],["How long does it take to make?","만드는 데 얼마나 걸려요?"]]},
+ {n:"36",p:"Should I ___?",ex:[["Should I wait?","기다릴까요?"],["Should I go now?","지금 갈까요?"],["Should I pay here?","여기서 낼까요?"]]},
+ {n:"37",p:"I have to ___.",ex:[["I have to go.","가봐야 해요"],["I have to leave now.","지금 가야 해요"],["I have to call someone.","전화 좀 해야 해요"]]},
+ {n:"38",p:"I should ___.",ex:[["I should go.","가야겠어요"],["I should rest.","쉬어야겠어요"],["I should call them.","전화해야겠어요"]]},
+ {n:"39",p:"You should ___.",ex:[["You should try this.","이거 드셔보세요"],["You should rest.","쉬세요"],["You should see it.","꼭 보세요"]]},
+ {n:"40",p:"May I ___?",ex:[["May I come in?","들어가도 될까요?"],["May I sit here?","여기 앉아도 될까요?"],["May I ask your name?","성함 여쭤봐도 될까요?"]]},
+ {n:"41",p:"Could I ___?",ex:[["Could I ask you something?","뭐 좀 여쭤봐도 될까요?"],["Could I have a moment?","잠깐 시간 괜찮으세요?"],["Could I sit here?","여기 앉아도 될까요?"]]},
+ {n:"42",p:"Can we ___?",ex:[["Can we sit here?","여기 앉아도 돼요?"],["Can we order now?","지금 주문해도 돼요?"],["Can we take a photo?","사진 찍어도 돼요?"]]},
+ {n:"43",p:"Shall we ___?",ex:[["Shall we go?","갈까요?"],["Shall we eat?","먹을까요?"],["Shall we start?","시작할까요?"]]},
+ {n:"44",p:"Why don't you ___?",ex:[["Why don't you try it?","한번 드셔보세요"],["Why don't you rest?","좀 쉬세요"],["Why don't you come with us?","같이 가요"]]},
+ {n:"45",p:"I'd like to ___.",ex:[["I'd like to check in.","체크인할게요"],["I'd like to order.","주문할게요"],["I'd like to pay now.","지금 계산할게요"]]},
+ {n:"46",p:"I don't want to ___.",ex:[["I don't want to be late.","늦고 싶지 않아요"],["I don't want to bother you.","폐 끼치고 싶지 않아요"],["I don't want to wait.","기다리기 싫어요"]]},
+ {n:"47",p:"I'm trying to ___.",ex:[["I'm trying to find my hotel.","호텔을 찾고 있어요"],["I'm trying to call a taxi.","택시를 부르려고요"],["I'm trying to say it in Russian.","러시아어로 말해보려고요"]]},
+ {n:"48",p:"I feel ___.",ex:[["I feel tired.","피곤해요"],["I feel sick.","몸이 안 좋아요"],["I feel much better.","훨씬 나아요"]]},
+ {n:"49",p:"I hope ___.",ex:[["I hope so.","그러길 바라요"],["I hope it's not far.","멀지 않길 바라요"],["I hope to see you again.","또 뵙길 바라요"]]},
+ {n:"50",p:"I'm not ___.",ex:[["I'm not sure.","잘 모르겠어요"],["I'm not ready.","아직 준비 안 됐어요"],["I'm not hungry.","배 안 고파요"]]},
+ {n:"51",p:"Are you ___?",ex:[["Are you okay?","괜찮으세요?"],["Are you ready?","준비되셨어요?"],["Are you sure?","확실해요?"]]},
+ {n:"52",p:"Are you going to ___?",ex:[["Are you going to eat?","드실 거예요?"],["Are you going to join us?","같이 하실 거예요?"],["Are you going to the meeting?","회의 가세요?"]]},
+ {n:"53",p:"Did you ___?",ex:[["Did you eat?","식사하셨어요?"],["Did you sleep well?","잘 주무셨어요?"],["Did you like it?","마음에 드셨어요?"]]},
+ {n:"54",p:"Does it ___?",ex:[["Does it work?","작동돼요?"],["Does it hurt?","아파요?"],["Does it cost much?","많이 비싸요?"]]},
+ {n:"55",p:"That's ___.",ex:[["That's good.","좋네요"],["That's right.","맞아요"],["That's too much.","너무 많아요"]]},
+ {n:"56",p:"I'll ___.",ex:[["I'll take this.","이걸로 할게요"],["I'll be back.","다시 올게요"],["I'll call you.","전화할게요"]]},
+ {n:"57",p:"I'll be there in ___.",ex:[["I'll be there in five minutes.","5분 후에 갈게요"],["I'll be there in an hour.","한 시간 후에 갈게요"],["I'll be there soon.","곧 갈게요"]]},
+ {n:"58",p:"Please ___.",ex:[["Please come in.","들어오세요"],["Please sit down.","앉으세요"],["Please help me.","도와주세요"]]},
+ {n:"59",p:"Don't ___.",ex:[["Don't worry.","걱정 마세요"],["Don't be late.","늦지 마세요"],["Don't go yet.","아직 가지 마세요"]]},
+ {n:"60",p:"Excuse me, ___.",ex:[["Excuse me, where is the exit?","실례지만 출구가 어디예요?"],["Excuse me, can you help me?","실례지만 도와주실래요?"],["Excuse me, is this seat free?","실례지만 여기 자리 있어요?"]]},
+ {n:"61",p:"I'm sorry for ___.",ex:[["I'm sorry for being late.","늦어서 죄송해요"],["I'm sorry for the trouble.","번거롭게 해서 죄송해요"],["I'm sorry for my English.","영어가 서툴러서 죄송해요"]]},
+ {n:"62",p:"Nice to ___.",ex:[["Nice to meet you.","만나서 반가워요"],["Nice to see you again.","또 뵈어 반가워요"],["Nice talking to you.","얘기 즐거웠어요"]]},
+ {n:"63",p:"I'm here to ___.",ex:[["I'm here to give a lecture.","강의하러 왔어요"],["I'm here to work.","일하러 왔어요"],["I'm here to travel.","여행하러 왔어요"]]},
+ {n:"64",p:"Have you ever ___?",ex:[["Have you ever been to Korea?","한국에 가보셨어요?"],["Have you ever tried Korean food?","한국 음식 드셔보셨어요?"],["Have you ever seen this?","이거 보신 적 있어요?"]]},
+ {n:"65",p:"I've never ___.",ex:[["I've never been here.","여기 처음이에요"],["I've never tried this.","이건 처음 먹어봐요"],["I've never seen this.","이건 처음 봐요"]]},
+ {n:"66",p:"I'm looking forward to ___.",ex:[["I'm looking forward to it.","기대돼요"],["I'm looking forward to the trip.","여행이 기대돼요"],["I'm looking forward to seeing you.","뵙기를 기대해요"]]},
+ {n:"67",p:"It's better to ___.",ex:[["It's better to go now.","지금 가는 게 좋아요"],["It's better to take a taxi.","택시 타는 게 나아요"],["It's better to ask someone.","누구한테 물어보는 게 나아요"]]},
+ {n:"68",p:"It's hard to ___.",ex:[["It's hard to say.","말하기 어렵네요"],["It's hard to find.","찾기 어려워요"],["It's hard to understand.","이해하기 어려워요"]]},
+ {n:"69",p:"There's no ___.",ex:[["There's no problem.","문제없어요"],["There's no time.","시간이 없어요"],["There's no wifi.","와이파이가 없어요"]]},
+ {n:"70",p:"What does ___ mean?",ex:[["What does this word mean?","이 단어 무슨 뜻이에요?"],["What does that mean?","그게 무슨 뜻이에요?"],["What does this sign mean?","이 표지판 무슨 뜻이에요?"]]},
+ {n:"71",p:"Could you say ___ again?",ex:[["Could you say that again?","다시 말씀해 주실래요?"],["Could you say it slowly?","천천히 말씀해 주실래요?"],["Could you say your name again?","성함 다시 말씀해 주실래요?"]]},
+ {n:"72",p:"Is this ___?",ex:[["Is this the right way?","이 길이 맞아요?"],["Is this for me?","이거 제 거예요?"],["Is this free?","이거 무료예요?"]]},
+ {n:"73",p:"Who is ___?",ex:[["Who is he?","저분 누구세요?"],["Who is in charge?","담당자가 누구예요?"],["Who is your teacher?","선생님이 누구세요?"]]},
+ {n:"74",p:"Why is ___?",ex:[["Why is it closed?","왜 문 닫았어요?"],["Why is it so expensive?","왜 이렇게 비싸요?"],["Why is it late?","왜 늦어요?"]]},
+ {n:"75",p:"When do you ___?",ex:[["When do you open?","언제 열어요?"],["When do you close?","언제 닫아요?"],["When do you leave?","언제 떠나세요?"]]},
+ {n:"76",p:"How can I ___?",ex:[["How can I get there?","거기 어떻게 가요?"],["How can I help you?","뭘 도와드릴까요?"],["How can I pay?","어떻게 결제해요?"]]},
+ {n:"77",p:"What should I ___?",ex:[["What should I do?","어떻게 해야 할까요?"],["What should I see here?","여기서 뭘 보면 좋을까요?"],["What should I order?","뭘 주문하면 좋을까요?"]]}
+];
+
+/* ===== DATA: ROLEPLAY ===== */
+const SCENES=[
+ {h:"SCENE 1 · 택시 타고 목적지 말하기",sub:"공항 → 호텔",cheat:"To ___, please. / Please use the meter.",turns:[
+  {who:"Driver",en:"Where to?",ko:"어디로 가세요?"},
+  {who:"내 차례",me:1,en:"To this address, please.",ko:"이 주소로 가주세요. (지도 보여주며)"},
+  {who:"Driver",en:"Okay, about 20 minutes.",ko:"네, 20분쯤 걸려요."},
+  {who:"내 차례",me:1,en:"Please use the meter.",ko:"미터기 켜주세요."}]},
+ {h:"SCENE 1 · 요금 결제 & 영수증",sub:"택시",cheat:"Can I pay by ___? / A receipt, please.",turns:[
+  {who:"Driver",en:"Here we are. It's 500 som.",ko:"도착했어요. 500솜입니다."},
+  {who:"내 차례",me:1,en:"Can I pay by card?",ko:"카드로 돼요?"},
+  {who:"Driver",en:"Cash only, sorry.",ko:"죄송해요, 현금만요."},
+  {who:"내 차례",me:1,en:"Okay. A receipt, please.",ko:"알겠어요. 영수증 주세요."}]},
+ {h:"SCENE 2 · 프런트 체크인",sub:"호텔",cheat:"I have a reservation. / My name is ___.",turns:[
+  {who:"Staff",en:"Hello, welcome. Check-in?",ko:"안녕하세요, 체크인이신가요?"},
+  {who:"내 차례",me:1,en:"Yes. I have a reservation. My name is Kim.",ko:"네, 예약했어요. 제 이름은 Kim입니다."},
+  {who:"Staff",en:"Your passport, please.",ko:"여권 주시겠어요?"},
+  {who:"내 차례",me:1,en:"Here you are.",ko:"여기 있습니다."}]},
+ {h:"SCENE 2 · 와이파이 & 조식 문의",sub:"호텔",cheat:"What is the ___? / What time is ___?",turns:[
+  {who:"Staff",en:"Here is your keycard. Room 502.",ko:"카드키입니다. 502호예요."},
+  {who:"내 차례",me:1,en:"What is the wifi password?",ko:"와이파이 비밀번호가 뭐예요?"},
+  {who:"Staff",en:"It's on this paper. Free wifi.",ko:"이 종이에 있어요. 무료예요."},
+  {who:"내 차례",me:1,en:"What time is breakfast?",ko:"조식은 몇 시예요?"}]},
+ {h:"SCENE 2 · 방이 추울 때 & 수건",sub:"호텔",cheat:"The ___ is too ___. / Can I get more ___?",turns:[
+  {who:"Staff",en:"Front desk, how can I help you?",ko:"프런트입니다. 무엇을 도와드릴까요?"},
+  {who:"내 차례",me:1,en:"The room is too cold.",ko:"방이 너무 추워요."},
+  {who:"Staff",en:"I'll send someone right now.",ko:"지금 바로 사람 보낼게요."},
+  {who:"내 차례",me:1,en:"And can I get more towels?",ko:"그리고 수건 좀 더 주세요."}]},
+ {h:"SCENE 2 · 체크아웃 & 짐 보관",sub:"호텔",cheat:"I'd like to ___. / Can I leave my ___ here?",turns:[
+  {who:"Staff",en:"Good morning. Are you checking out?",ko:"안녕하세요. 체크아웃하시나요?"},
+  {who:"내 차례",me:1,en:"Yes, I'd like to check out, please.",ko:"네, 체크아웃할게요."},
+  {who:"Staff",en:"All done. Thank you.",ko:"완료됐어요. 감사합니다."},
+  {who:"내 차례",me:1,en:"Can I leave my luggage here until 3?",ko:"3시까지 짐 좀 맡길 수 있을까요?"}]},
+ {h:"SCENE 3 · 식당 입장 & 주문",sub:"식당",cheat:"I'd like ___, please. / No ___, please.",turns:[
+  {who:"Staff",en:"Hello, how many?",ko:"몇 분이세요?"},
+  {who:"내 차례",me:1,en:"One, please.",ko:"한 명이요."},
+  {who:"Staff",en:"Are you ready to order?",ko:"주문하시겠어요?"},
+  {who:"내 차례",me:1,en:"I'd like this one, please. Water, no ice.",ko:"이걸로 주세요. 물은 얼음 빼고요."}]},
+ {h:"SCENE 3 · 식사 중 대화 & 계산",sub:"식당",cheat:"What is this? / Bill, please.",turns:[
+  {who:"Staff",en:"Here you are. Enjoy.",ko:"나왔습니다. 맛있게 드세요."},
+  {who:"내 차례",me:1,en:"Thank you. What is this?",ko:"감사합니다. 이건 뭐예요?"},
+  {who:"Staff",en:"It's a local dish.",ko:"현지 음식이에요."},
+  {who:"내 차례",me:1,en:"It's delicious! Bill, please.",ko:"정말 맛있어요! 계산서 주세요."}]},
+ {h:"SCENE 4 · 가격 & 할인",sub:"상점 · 쇼핑",cheat:"How much is ___? / Can you give a discount?",turns:[
+  {who:"내 차례",me:1,en:"How much is this?",ko:"이거 얼마예요?"},
+  {who:"Staff",en:"300 som.",ko:"300솜이요."},
+  {who:"내 차례",me:1,en:"It's a little expensive. Can you give a discount?",ko:"좀 비싸요. 할인 돼요?"},
+  {who:"Staff",en:"Okay, a small one.",ko:"네, 조금요."}]},
+ {h:"SCENE 5 · 길을 잃었을 때",sub:"길찾기 · 도움",cheat:"Can you help me? I'm lost. / Show me on the map.",turns:[
+  {who:"내 차례",me:1,en:"Excuse me, can you help me? I'm lost.",ko:"실례합니다, 도와주실래요? 길을 잃었어요."},
+  {who:"Passerby",en:"Where do you want to go?",ko:"어디 가세요?"},
+  {who:"내 차례",me:1,en:"To this hotel. Can you show me on the map?",ko:"이 호텔이요. 지도에서 보여주실래요?"},
+  {who:"Passerby",en:"It's that way, straight.",ko:"저쪽으로 직진이에요."}]},
+ {h:"SCENE 5 · 약국에서",sub:"몸이 안 좋을 때",cheat:"Where is ___? / I have a ___.",turns:[
+  {who:"내 차례",me:1,en:"Excuse me, where is a pharmacy?",ko:"실례합니다, 약국이 어디예요?"},
+  {who:"Staff",en:"Two minutes, that way.",ko:"저쪽으로 2분이요."},
+  {who:"내 차례",me:1,en:"Thank you. I have a headache.",ko:"감사합니다. 머리가 아파요."},
+  {who:"Pharmacist",en:"Take this.",ko:"이거 드세요."}]},
+ {h:"SCENE 6 · 리셉션 스몰토크",sub:"네트워킹",cheat:"I'm from ___. / Your ___ is beautiful.",turns:[
+  {who:"Foreigner",en:"Hello! Great lecture today! Where are you from?",ko:"안녕하세요! 강의 좋았어요! 어디서 오셨어요?"},
+  {who:"내 차례",me:1,en:"Thank you. I'm from Korea. Nice to meet you.",ko:"감사합니다. 한국에서 왔어요. 반가워요."},
+  {who:"Foreigner",en:"How do you like Kyrgyzstan?",ko:"키르기스스탄은 어때요?"},
+  {who:"내 차례",me:1,en:"Your country is beautiful.",ko:"이 나라가 정말 아름답네요."}]},
+ {h:"SCENE 6 · 빠른 말 방어 & 복구",sub:"돌발 상황",cheat:"Slowly, please? / One more time, please?",turns:[
+  {who:"Foreigner",en:"(빠른 속도로 질문)",ko:"(미소로 부드럽게 방어하기)"},
+  {who:"내 차례",me:1,en:"Sorry, my English is not good. Slowly, please?",ko:"죄송해요, 영어를 잘 못 해요. 천천히요?"},
+  {who:"Foreigner",en:"Oh, sorry! I'll speak slowly.",ko:"아, 죄송해요! 천천히 말할게요."},
+  {who:"내 차례",me:1,en:"Oh, I see! It's okay. Thank you.",ko:"아, 그렇군요! 괜찮아요. 감사합니다."}]},
+ {h:"SCENE 6 · 저녁 식사 자리 (환대)",sub:"감사 + 조절",cheat:"Just a little, please. / I'm full, thank you.",turns:[
+  {who:"Host",en:"Please, eat more! Try this.",ko:"더 드세요! 이것도 드셔보세요."},
+  {who:"내 차례",me:1,en:"It's delicious! Just a little, please.",ko:"맛있어요! 조금만요."},
+  {who:"Host",en:"Some more tea? Cheers!",ko:"차 더 드릴까요? 건배!"},
+  {who:"내 차례",me:1,en:"I'm full, thank you. Cheers! Thank you for your hospitality.",ko:"배불러요, 감사합니다. 건배! 환대 감사합니다."}]},
+ {h:"SCENE 6 · 헤어질 때 인사",sub:"마무리",cheat:"It was nice talking to you. / Take care.",turns:[
+  {who:"Foreigner",en:"It was nice to meet you. Let's keep in touch.",ko:"만나서 반가웠어요. 연락하고 지내요."},
+  {who:"내 차례",me:1,en:"Me too. It was nice talking to you. Take care!",ko:"저도요. 얘기 즐거웠어요. 잘 지내세요!"}]},
+ {h:"SCENE 7 · 첫 만남 & 자기소개",sub:"대화편 · 네트워킹",cheat:"I'm here to ___ / Have you ever ___? / What do you ___?",turns:[
+  {who:"Colleague",en:"Hello! Welcome to Bishkek.",ko:"안녕하세요! 비슈케크에 오신 걸 환영해요."},
+  {who:"내 차례",me:1,en:"Nice to meet you. I'm here to give a lecture.",ko:"만나서 반가워요. 강의하러 왔어요."},
+  {who:"Colleague",en:"Oh, great! Is this your first time here?",ko:"오, 좋네요! 여기 처음이세요?"},
+  {who:"내 차례",me:1,en:"Yes. Have you ever been to Korea?",ko:"네. 한국에 가보셨어요?"},
+  {who:"Colleague",en:"No, not yet. But I'd love to.",ko:"아직요. 가보고 싶어요."},
+  {who:"내 차례",me:1,en:"What do you do here?",ko:"여기서 어떤 일 하세요?"}]},
+ {h:"SCENE 8 · 식사 자리 대화 (취향)",sub:"대화편 · 식사",cheat:"I like ___ / What kind of ___? / Would you like ___?",turns:[
+  {who:"Host",en:"Please try this. It's our traditional dish.",ko:"이거 드셔보세요. 전통 음식이에요."},
+  {who:"내 차례",me:1,en:"This is delicious! What kind of meat is this?",ko:"정말 맛있어요! 무슨 고기예요?"},
+  {who:"Host",en:"It's beef. Do you want some more?",ko:"소고기예요. 더 드릴까요?"},
+  {who:"내 차례",me:1,en:"Just a little, please. I like it, but I don't like spicy food.",ko:"조금만요. 좋은데 매운 건 못 먹어요."},
+  {who:"Host",en:"No problem. Would you like some tea?",ko:"괜찮아요. 차 드릴까요?"},
+  {who:"내 차례",me:1,en:"Yes, please. Thank you.",ko:"네, 주세요. 감사합니다."}]},
+ {h:"SCENE 9 · 추천받고 관광 계획",sub:"대화편 · 여가",cheat:"What should I ___? / How far is ___? / How about ___?",turns:[
+  {who:"내 차례",me:1,en:"I want to see the city. What should I see here?",ko:"도시를 구경하고 싶어요. 여기서 뭘 보면 좋을까요?"},
+  {who:"Colleague",en:"You should visit Ala-Too Square.",ko:"알라투 광장에 가보세요."},
+  {who:"내 차례",me:1,en:"How far is it from here?",ko:"여기서 얼마나 멀어요?"},
+  {who:"Colleague",en:"Not far. About ten minutes by taxi.",ko:"안 멀어요. 택시로 10분쯤요."},
+  {who:"내 차례",me:1,en:"How about going together this evening?",ko:"오늘 저녁에 같이 갈까요?"},
+  {who:"Colleague",en:"Sure! Let's meet at six.",ko:"좋아요! 6시에 만나요."}]},
+ {h:"SCENE 10 · 일정 · 약속 잡기",sub:"대화편 · 약속",cheat:"When is ___? / Are you going to ___? / Shall we ___?",turns:[
+  {who:"Colleague",en:"The dinner is tomorrow. Are you going to come?",ko:"저녁 식사가 내일이에요. 오실 거예요?"},
+  {who:"내 차례",me:1,en:"Yes, of course. When is it?",ko:"네, 물론이죠. 언제예요?"},
+  {who:"Colleague",en:"At seven, at the hotel.",ko:"7시에 호텔에서요."},
+  {who:"내 차례",me:1,en:"Great. I'll be there in time.",ko:"좋아요. 시간 맞춰 갈게요."},
+  {who:"Colleague",en:"Shall we go together?",ko:"같이 갈까요?"},
+  {who:"내 차례",me:1,en:"Sure. Let's meet in the lobby.",ko:"네. 로비에서 만나요."}]},
+ {h:"SCENE 11 · 가벼운 안부 · 잡담",sub:"대화편 · 스몰토크",cheat:"Did you ___? / How do you like ___? / I think ___",turns:[
+  {who:"Colleague",en:"Good morning! Did you sleep well?",ko:"좋은 아침이에요! 잘 주무셨어요?"},
+  {who:"내 차례",me:1,en:"Yes, thank you. I feel much better today.",ko:"네, 감사합니다. 오늘은 훨씬 나아요."},
+  {who:"Colleague",en:"How do you like Kyrgyzstan?",ko:"키르기스스탄 어떠세요?"},
+  {who:"내 차례",me:1,en:"I like it a lot. I think the people are very kind.",ko:"정말 좋아요. 사람들이 참 친절한 것 같아요."},
+  {who:"Colleague",en:"That's nice to hear.",ko:"그렇게 말씀해 주시니 좋네요."},
+  {who:"내 차례",me:1,en:"The weather is cold, but it's beautiful.",ko:"날씨는 춥지만 아름다워요."}]},
+ {h:"SCENE 12 · 감사 · 작별 · 재회 기약",sub:"대화편 · 마무리",cheat:"I'm looking forward to ___ / I hope ___ / Could you say ___ again?",turns:[
+  {who:"Host",en:"It was a pleasure to have you here.",ko:"모셔서 즐거웠어요."},
+  {who:"내 차례",me:1,en:"Thank you for everything. It was nice talking to you.",ko:"여러 가지로 감사합니다. 얘기 즐거웠어요."},
+  {who:"Host",en:"Please visit us again.",ko:"또 오세요."},
+  {who:"내 차례",me:1,en:"I hope to come back. I'm looking forward to it.",ko:"다시 오길 바라요. 기대돼요."},
+  {who:"Host",en:"Here is my contact.",ko:"제 연락처예요."},
+  {who:"내 차례",me:1,en:"Thank you. Could you say your name again?",ko:"감사합니다. 성함 다시 말씀해 주실래요?"}]},
+ {h:"SCENE 13 · 의견 주고받기",sub:"대화편 · 의견",cheat:"I think it's better to ___ / I don't think ___ / What do you think?",turns:[
+  {who:"Colleague",en:"Should we take the bus or a taxi?",ko:"버스 탈까요, 택시 탈까요?"},
+  {who:"내 차례",me:1,en:"I think it's better to take a taxi.",ko:"택시 타는 게 나을 것 같아요."},
+  {who:"Colleague",en:"But the bus is cheaper.",ko:"근데 버스가 더 싸요."},
+  {who:"내 차례",me:1,en:"That's true, but I don't think we have time.",ko:"맞아요, 근데 시간이 없는 것 같아요."},
+  {who:"Colleague",en:"Okay. What do you think about leaving now?",ko:"알겠어요. 지금 출발하는 거 어떻게 생각해요?"},
+  {who:"내 차례",me:1,en:"Good idea. There's no time to wait.",ko:"좋아요. 기다릴 시간이 없어요."}]},
+ {h:"SCENE 14 · 곤란할 때 사과 · 복구",sub:"대화편 · 돌발",cheat:"I'm sorry for ___ / What does ___ mean? / I'm trying to ___",turns:[
+  {who:"내 차례",me:1,en:"Excuse me, I'm sorry for being late.",ko:"실례합니다, 늦어서 죄송해요."},
+  {who:"Colleague",en:"No problem. Come in.",ko:"괜찮아요. 들어오세요."},
+  {who:"Colleague",en:"(러시아어로 한마디 건넴)",ko:"(러시아어 단어를 말함)"},
+  {who:"내 차례",me:1,en:"Sorry, what does that word mean?",ko:"죄송해요, 그게 무슨 뜻이에요?"},
+  {who:"Colleague",en:"It means 'welcome.'",ko:"‘환영합니다’라는 뜻이에요."},
+  {who:"내 차례",me:1,en:"Ah, I see! I'm trying to learn Russian.",ko:"아, 그렇군요! 러시아어를 배우려고 해요."}]}
+];
+
+/* ===== DATA: RUSSIAN (rd: *...* = 강세) ===== */
+const RU=[
+ {g:"간판 · 표지판 (눈으로 알아보기)",items:[
+  {cy:"ВХОД",rd:"*브*홋",ko:"입구"},{cy:"ВЫХОД",rd:"*븨*홋",ko:"출구"},
+  {cy:"ОТКРЫТО",rd:"아트*크릐*타",ko:"영업 중 (열림)"},{cy:"ЗАКРЫТО",rd:"자*크릐*타",ko:"닫음 (종료)"},
+  {cy:"ТУАЛЕТ",rd:"뚜알*롓*",ko:"화장실"},{cy:"АПТЕКА",rd:"압*쩨*카",ko:"약국"},
+  {cy:"МАГАЗИН",rd:"마가*진*",ko:"상점"},{cy:"БАЗАР / РЫНОК",rd:"바*자르* / *릐*낙",ko:"시장"},
+  {cy:"ОБМЕН ВАЛЮТ",rd:"아브*멘* 발*륫*",ko:"환전소"},{cy:"БАНКОМАТ",rd:"반카*맛*",ko:"ATM"}]},
+ {g:"인사 · 기본 예절",items:[
+  {cy:"Спасибо",rd:"스파*시*바",ko:"감사합니다"},{cy:"Большое спасибо",rd:"발*쇼*예 스파*시*바",ko:"정말 감사합니다"},
+  {cy:"Здравствуйте",rd:"*즈드라*스트부이쩨",ko:"안녕하세요 (정중)"},{cy:"Доброе утро",rd:"*도*브라예 *우*뜨라",ko:"좋은 아침이에요"},
+  {cy:"Привет",rd:"쁘리*벳*",ko:"안녕 (편하게)"},{cy:"Пожалуйста",rd:"빠*좔*루스타",ko:"부탁합니다 / 천만에요"},
+  {cy:"Извините",rd:"이즈비*니*쩨",ko:"실례합니다 / 죄송합니다"},{cy:"Да / Нет",rd:"*다* / *녯*",ko:"네 / 아니오"},
+  {cy:"Хорошо",rd:"하라*쇼*",ko:"좋아요 / 알겠어요"},{cy:"До свидания",rd:"다 스비*다*니야",ko:"안녕히 계세요"}]},
+ {g:"나를 소개 · 언어 방어막",items:[
+  {cy:"Меня зовут ___",rd:"미*냐* 자*붓* ___",ko:"제 이름은 ___입니다"},
+  {cy:"Я из Кореи",rd:"야 이즈 카*레*이",ko:"저는 한국에서 왔어요"},
+  {cy:"Я не говорю по-русски",rd:"야 니 가바*류* 빠*루*스키",ko:"러시아어 못 해요"},
+  {cy:"Вы говорите по-английски?",rd:"븨 가바*리*쩨 빠앙*글리*스키?",ko:"영어 하세요?"},
+  {cy:"Я не понимаю",rd:"야 니 빠니*마*유",ko:"이해 못 했어요"},
+  {cy:"Медленнее, пожалуйста",rd:"*미*들레녜예, 빠*좔*루스타",ko:"천천히 말씀해 주세요"},
+  {cy:"Напишите, пожалуйста",rd:"나피*시*쩨, 빠*좔*루스타",ko:"적어 주세요"}]},
+ {g:"택시 · 이동",items:[
+  {cy:"В этот адрес, пожалуйста",rd:"브 *에*땃 *아*드레스",ko:"이 주소로 가주세요"},
+  {cy:"Сколько до ___?",rd:"*스꼴*까 다 ___?",ko:"___까지 얼마예요?"},
+  {cy:"Включите счётчик",rd:"프클류*치*쩨 *숏*칙",ko:"미터기 켜주세요"},
+  {cy:"Остановите здесь",rd:"아스따나*비*쩨 즈제스",ko:"여기서 세워주세요"},
+  {cy:"Это далеко?",rd:"*에*타 달리*코*?",ko:"멀어요?"},
+  {cy:"Налево / Направо",rd:"날*례*바 / 나*프라*바",ko:"왼쪽 / 오른쪽"},
+  {cy:"Прямо",rd:"*프랴*마",ko:"직진"},{cy:"Где такси?",rd:"그제 딱*시*?",ko:"택시 어디서 타요?"}]},
+ {g:"호텔",items:[
+  {cy:"У меня бронь",rd:"우 미*냐* 브론",ko:"예약했어요"},
+  {cy:"Какой пароль от вай-фай?",rd:"까*코*이 빠*롤* 앗 바이파이?",ko:"와이파이 비밀번호가 뭐예요?"},
+  {cy:"Во сколько завтрак?",rd:"바 *스꼴*까 *자*프트락?",ko:"조식 몇 시예요?"},
+  {cy:"В номере холодно",rd:"브 *노*메례 *홀*라드나",ko:"방이 추워요"},
+  {cy:"Дайте полотенце",rd:"*다*이쩨 빨라*쩬*쩨",ko:"수건 주세요"},
+  {cy:"Вай-фай не работает",rd:"바이파이 니 라*보*타옛",ko:"와이파이가 안 돼요"}]},
+ {g:"식당 · 카페",items:[
+  {cy:"Меню, пожалуйста",rd:"미*뉴*, 빠*좔*루스타",ko:"메뉴 주세요"},
+  {cy:"Я буду это",rd:"야 *부*두 *에*타",ko:"이걸로 할게요 (가리키며)"},
+  {cy:"Воду, пожалуйста",rd:"*보*두, 빠*좔*루스타",ko:"물 주세요"},
+  {cy:"Без льда",rd:"베즈 *리*다",ko:"얼음 빼고"},
+  {cy:"Чай / Кофе",rd:"*차이* / *코*페",ko:"차 / 커피"},
+  {cy:"Очень вкусно",rd:"*오*친 *프꾸*스나",ko:"아주 맛있어요"},
+  {cy:"Счёт, пожалуйста",rd:"*숏*, 빠*좔*루스타",ko:"계산서 주세요"},
+  {cy:"Можно картой?",rd:"*모*즈나 *카*르따이?",ko:"카드 돼요?"}]},
+ {g:"쇼핑 · 돈",items:[
+  {cy:"Сколько это стоит?",rd:"*스꼴*까 에타 *스또*잇?",ko:"이거 얼마예요?"},
+  {cy:"Это дорого",rd:"에타 *도*라가",ko:"비싸요"},
+  {cy:"Есть скидка?",rd:"예스찌 *스킷*카?",ko:"할인 돼요?"},
+  {cy:"Дайте пакет",rd:"*다*이쩨 빠*켓*",ko:"봉투 주세요"},
+  {cy:"Только наличные",rd:"*톨*카 날*리*치늬예",ko:"현금만요 (자주 듣는 말)"},
+  {cy:"Сдача",rd:"*스다*차",ko:"거스름돈"}]},
+ {g:"숫자 — 가격 알아듣기",items:[
+  {cy:"один",rd:"아*진*",ko:"1"},{cy:"два",rd:"*드바*",ko:"2"},{cy:"три",rd:"*뜨리*",ko:"3"},
+  {cy:"четыре",rd:"체*뜨이*리",ko:"4"},{cy:"пять",rd:"*뺘찌*",ko:"5"},{cy:"шесть",rd:"*셰스*찌",ko:"6"},
+  {cy:"семь",rd:"*셈*",ko:"7"},{cy:"восемь",rd:"*보*셈",ko:"8"},{cy:"девять",rd:"*제*뱌찌",ko:"9"},
+  {cy:"десять",rd:"*제*샤찌",ko:"10"},{cy:"двадцать",rd:"*드바*짜찌",ko:"20"},{cy:"тридцать",rd:"*뜨리*짜찌",ko:"30"},
+  {cy:"пятьдесят",rd:"뺘지*샷*",ko:"50"},{cy:"сто",rd:"*스또*",ko:"100"},{cy:"тысяча",rd:"*뜨이*샤차",ko:"1000"},
+  {cy:"сом",rd:"*솜*",ko:"솜 (현지 화폐)"}]},
+ {g:"길찾기 · 도움 · 응급",items:[
+  {cy:"Где туалет?",rd:"그제 뚜알*롓*?",ko:"화장실 어디예요?"},
+  {cy:"Где ___?",rd:"그제 ___?",ko:"___ 어디예요?"},
+  {cy:"Помогите, пожалуйста",rd:"빠마*기*쩨, 빠*좔*루스타",ko:"도와주세요"},
+  {cy:"Я заблудился",rd:"야 자블루*질*사",ko:"길을 잃었어요"},
+  {cy:"Покажите на карте",rd:"빠카*지*쩨 나 *카*르쩨",ko:"지도에서 보여주세요"},
+  {cy:"Вызовите врача",rd:"*븨*자비쩨 브라*차*",ko:"의사를 불러주세요"},
+  {cy:"У меня болит голова",rd:"우 미*냐* 발*릿* 갈라*바*",ko:"머리가 아파요"},
+  {cy:"Где больница?",rd:"그제 발*니*짜?",ko:"병원 어디예요?"}]},
+ {g:"시간 표현",items:[
+  {cy:"Сегодня",rd:"시*보*드냐",ko:"오늘"},{cy:"Завтра",rd:"*자*프트라",ko:"내일"},
+  {cy:"Сейчас",rd:"시*차스*",ko:"지금"},{cy:"Утром / Вечером",rd:"*우*뜨람 / *베*체람",ko:"아침에 / 저녁에"},
+  {cy:"Который час?",rd:"카*토*릐 *차스*?",ko:"몇 시예요?"}]},
+ {g:"만능 패턴 — 빈칸만 바꿔 끼우기",items:[
+  {cy:"Где ___?",rd:"그제 ___?",ko:"___ 어디예요?"},
+  {cy:"Сколько стоит ___?",rd:"*스꼴*까 *스또*잇 ___?",ko:"___ 얼마예요?"},
+  {cy:"Можно ___?",rd:"*모*즈나 ___?",ko:"___ 해도 돼요?"},
+  {cy:"У вас есть ___?",rd:"우 바스 예스찌 ___?",ko:"___ 있어요?"},
+  {cy:"Дайте ___, пожалуйста",rd:"*다*이쩨 ___, 빠*좔*루스타",ko:"___ 주세요"},
+  {cy:"Я хочу ___",rd:"야 하*추* ___",ko:"___ 원해요"}]}
+];
+
+/* ===== render ===== */
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+function spkBtn(text,lang){const b=el("button","spk",spkSVG);b.onclick=e=>{e.stopPropagation();speak(text,lang,b);};return b;}
+
+// PLAN
+document.getElementById("pane-plan").innerHTML=`
+ <div class="eyebrow">한 달 학습 플랜</div>
+ <div class="plan-hero"><h2>새로 외우기 아닌, 입에 붙이기</h2>
+ <p>이미 아는 표현을 2초 안에 입에서 나오게 만들고, 식사·여가용 표현을 더합니다. 강의는 통역 지원 — 영어는 ‘친근하고 무리 없기’ 위한 것이면 충분합니다.</p></div>
+ <div class="pcard"><h3><span class="n">하루</span> 4시간 + 자투리</h3>
+ <ul><li><b>자투리</b> : 단어·패턴 ‘한→영 2초 즉답’, 안 나오는 것만 ★</li>
+ <li><b>1교시</b> 사교·생존 표현 · <b>2교시</b> 듣기·섀도잉</li>
+ <li><b>3교시</b> 롤플레이 · <b>4교시</b> 러시아어 + 점검</li></ul></div>
+ <div class="pcard"><h3><span class="n">4주</span> 흐름</h3>
+ <div class="wk"><div class="w">1주</div><div class="d">생존 자동화 — ‘느린 절반’ 없애기 + 자기소개</div></div>
+ <div class="wk"><div class="w">2주</div><div class="d">사교·식사 표현 — 매일 짧은 식사 자리 롤플레이</div></div>
+ <div class="wk"><div class="w">3주</div><div class="d">생존 상황 + 복구 — 호텔·택시·상점·도움</div></div>
+ <div class="wk"><div class="w">4주</div><div class="d">실전 모의 — 공항→호텔→식당→저녁. 출국 직전 복습</div></div></div>
+ <p class="note">아래 탭에서 단어·패턴·회화·러시아어를 탭하면 실시간 음성이 재생됩니다.</p>`;
+
+// WORDS
+const wEl=document.getElementById("words");
+WORDS.forEach(grp=>{
+  wEl.appendChild(el("div","glabel",'<span class="dot"></span>'+grp.g));
+  const card=el("div","card");
+  grp.items.forEach(([en,ko])=>{
+    const row=el("div","row");
+    const star=el("div","star","★");star.onclick=e=>{e.stopPropagation();star.classList.toggle("on");};
+    const txt=el("div","txt",'<div class="en">'+en+'</div><div class="ko">'+ko+'</div>');
+    const b=spkBtn(en,"en-US"); row.onclick=()=>speak(en,"en-US",b);
+    row.append(star,txt,b); card.appendChild(row);
+  });
+  wEl.appendChild(card);
+});
+
+// PATTERNS
+const pEl=document.getElementById("pats");
+PATS.forEach(o=>{
+  if(o.sec){ pEl.appendChild(el("div","glabel",'<span class="dot"></span>'+o.sec)); return; }
+  const pat=el("div","pat");
+  pat.appendChild(el("div","ph",(o.n?'<span class="rank">'+o.n+'</span>':'')+o.p));
+  o.ex.forEach(([en,ko])=>{
+    const ex=el("div","ex");
+    const txt=el("div","txt",'<div class="e">'+en+'</div><div class="k">'+ko+'</div>');
+    const mp=el("div","miniplay",playSVG);
+    ex.onclick=()=>speak(en,"en-US",null);
+    mp.onclick=e=>{e.stopPropagation();speak(en,"en-US",null);};
+    ex.append(txt,mp); pat.appendChild(ex);
+  });
+  pEl.appendChild(pat);
+});
+
+// ROLEPLAY
+const rEl=document.getElementById("rp");
+SCENES.forEach(sc=>{
+  rEl.appendChild(el("div","scene-h",sc.h));
+  rEl.appendChild(el("div","scene-sub",sc.sub));
+  const card=el("div","card");
+  sc.turns.forEach(tn=>{
+    const turn=el("div","turn"+(tn.me?" me":""));
+    const who=el("div","who",tn.who);
+    const bub=el("div","bub");
+    if(tn.me){
+      bub.innerHTML='<div class="ko">'+tn.ko+'</div>';
+      const cover=el("div","cover","탭하여 영어 확인 + 듣기");
+      cover.onclick=()=>{bub.innerHTML='<div class="en">'+tn.en+'</div><div class="ko">'+tn.ko+'</div>';speak(tn.en,"en-US",null);};
+      bub.appendChild(cover); turn.append(who,bub);
+    }else{
+      bub.innerHTML='<div class="en">'+tn.en+'</div><div class="ko">'+tn.ko+'</div>';
+      const mp=el("div","miniplay",playSVG); mp.onclick=()=>speak(tn.en,"en-US",null);
+      turn.append(who,bub,mp);
+    }
+    card.appendChild(turn);
+  });
+  rEl.appendChild(card);
+  rEl.appendChild(el("div","cheat","<b>치트키</b>  "+sc.cheat));
+});
+
+// RUSSIAN
+const ruEl=document.getElementById("ruList");
+RU.forEach(grp=>{
+  ruEl.appendChild(el("div","glabel ru",'<span class="dot"></span>'+grp.g));
+  const card=el("div","card");
+  grp.items.forEach(o=>{
+    const row=el("div","row");
+    const txt=el("div","txt",'<div class="en ru">'+o.cy+'</div><div class="read">'+hl(o.rd)+'</div><div class="ko">'+o.ko+'</div>');
+    const b=spkBtn(o.cy,"ru-RU"); row.onclick=()=>speak(o.cy,"ru-RU",b);
+    row.append(txt,b); card.appendChild(row);
+  });
+  ruEl.appendChild(card);
+});
+
+/* nav + speed */
+const TABS=[
+ {id:"plan",label:"플랜",svg:'<path d="M4 5h16M4 12h16M4 19h10"/>'},
+ {id:"words",label:"단어",svg:'<path d="M4 7h16M4 12h16M4 17h10"/>'},
+ {id:"pat",label:"패턴",svg:'<rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="11" height="6" rx="1.5"/>'},
+ {id:"rp",label:"회화",svg:'<path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 9 9 0 0 1-3.9-.9L3 21l1.9-5.6a8.4 8.4 0 0 1-.9-3.9A8.5 8.5 0 1 1 21 11.5z"/>'},
+ {id:"ru",label:"러시아어",svg:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'}
+];
+const nav=document.getElementById("nav");
+TABS.forEach((tb,i)=>{
+  const btn=el("button","tab"+(i===0?" on":""),'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+tb.svg+'</svg><span>'+tb.label+'</span>');
+  btn.onclick=()=>{
+    if(window.speechSynthesis)speechSynthesis.cancel(); stopPulse();
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));
+    document.querySelectorAll(".pane").forEach(p=>p.classList.remove("on"));
+    btn.classList.add("on"); document.getElementById("pane-"+tb.id).classList.add("on");
+    document.querySelector("main").scrollTop=0;
+  };
+  nav.appendChild(btn);
+});
+const rng=document.getElementById("rate"), rv=document.getElementById("rateVal");
+rng.oninput=()=>{ rate=parseFloat(rng.value); rv.textContent=rate.toFixed(2).replace(/0$/,'')+"x"; };
+</script>
+</body>
+</html>
